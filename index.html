@@ -169,10 +169,21 @@ function setState(on){
 }
 function start(){
   var u=STREAMS[cur.id];
-  if(u){audio.src=u;audio.volume=+$("vol").value;audio.play().catch(function(){setState(false)});}
+  if(u){
+    audio.src=u;audio.volume=+$("vol").value;
+    $("liveTxt").textContent="Conectando…";
+    audio.play().catch(function(e){fail(e&&e.name?e.name:"error")});
+  }
   else{audio.pause();audio.removeAttribute("src");}
   setState(true);
 }
+function fail(why){
+  setState(false);
+  var msg=why==="NotAllowedError"?"El navegador bloqueó el audio, tocá ▶ de nuevo":"No se pudo conectar al stream ("+why+")";
+  $("liveTxt").textContent=msg;
+}
+audio.onerror=function(){var c=audio.error?audio.error.code:0;if(playing||audio.src)fail("código "+c)};
+audio.onplaying=function(){setState(true)};
 $("play").onclick=function(){if(playing){audio.pause();setState(false)}else start()};
 $("vol").oninput=function(){audio.volume=+this.value};
 
