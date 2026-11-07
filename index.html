@@ -1,0 +1,922 @@
+accent: '#06b6d4',
+                            amber: '#f59e0b',
+                            neon: '#10b981'
+                        }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 12s linear infinite',
+                        'pulse-glow': 'pulseGlow 2s infinite alternate',
+                        'bar-bounce': 'barBounce 1s infinite alternate',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%': { boxShadow: '0 0 15px rgba(244, 63, 94, 0.4)' },
+                            '100%': { boxShadow: '0 0 30px rgba(6, 182, 212, 0.8)' }
+                        },
+                        barBounce: {
+                            '0%': { height: '15%' },<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Julito Radio toxica - Music Hub</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            900: '#881337',
+    
+                            '100%': { height: '100%' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f3f4f6;
+            user-select: none;
+        }
+        /* Glassmorphism Card Style */
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-panel-glow {
+            background: rgba(24, 15, 38, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(244, 63, 94, 0.2);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f43f5e;
+        }
+        /* Vinyl Record Animations */
+        .vinyl-paused {
+            animation-play-state: paused !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden text-slate-100 pb-24">
+
+    <!-- TOP HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-40 w-full glass-panel border-b border-slate-800/80 px-4 py-3 sm:px-6">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="filterByGenre('Todos')">
+                <div class="relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-tr from-brand-600 via-purple-600 to-brand-accent p-0.5 shadow-lg shadow-brand-500/30">
+                    <div class="w-full h-full bg-slate-950 rounded-full flex items-center justify-center">
+                        <i class="fa-solid fa-radio text-brand-500 text-lg"></i>
+                    </div>
+                    <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-neon opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-brand-neon"></span>
+                    </span>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg sm:text-xl tracking-tight bg-gradient-to-r from-white via-slate-200 to-brand-400 bg-clip-text text-transparent">
+                        EL ABUELO <span class="text-brand-500 text-xs px-2 py-0.5 rounded bg-brand-900/60 border border-brand-500/40 ml-1">ONLINE</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 font-medium hidden sm:block">Portal Universal de Música Automática</p>
+                </div>
+            </div>
+
+            <!-- Search & Controls -->
+            <div class="flex-1 max-w-md mx-2 sm:mx-4">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Buscar canción, artista o género..." 
+                           class="w-full bg-slate-900/90 text-sm rounded-full pl-10 pr-4 py-2 text-slate-200 placeholder-slate-500 border border-slate-700/60 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                </div>
+            </div>
+
+            <!-- Mode Toggle & Status -->
+            <div class="flex items-center gap-2">
+                <button onclick="toggleRadioMode()" id="modeToggleBtn" class="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-brand-500/20 text-brand-400 border border-brand-500/40 hover:bg-brand-500/30 transition">
+                    <i class="fa-solid fa-tower-broadcast animate-pulse"></i>
+                    <span id="modeText" class="hidden md:inline">Modo Radio ONLINE</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl w-full mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1">
+
+        <!-- LEFT COLUMN: PLAYER & GENRES (8 COLUMNS) -->
+        <section class="lg:col-span-8 flex flex-col gap-6">
+
+            <!-- HERO PLAYER CARD -->
+            <div class="glass-panel-glow rounded-3xl p-6 sm:p-8 relative overflow-hidden flex flex-col md:flex-row items-center gap-8 shadow-2xl">
+                <!-- Background Decorative Glow -->
+                <div class="absolute -right-16 -top-16 w-64 h-64 bg-brand-600/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -left-16 -bottom-16 w-64 h-64 bg-brand-accent/20 rounded-full blur-3xl pointer-events-none"></div>
+
+                <!-- Animated Vinyl / Artwork Cover -->
+                <div class="relative shrink-0 group">
+                    <div id="vinylDisc" class="w-44 h-44 sm:w-52 sm:h-52 rounded-full bg-slate-950 p-2 shadow-2xl relative flex items-center justify-center animate-spin-slow vinyl-paused border-4 border-slate-800/80">
+                        <!-- Vinyl Texture Lines -->
+                        <div class="absolute inset-2 rounded-full border border-slate-800 opacity-60"></div>
+                        <div class="absolute inset-6 rounded-full border border-slate-800 opacity-40"></div>
+                        <div class="absolute inset-10 rounded-full border border-slate-800 opacity-30"></div>
+                        
+                        <!-- Center Album Cover -->
+                        <img id="heroCoverArt" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80" alt="Cover" class="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover shadow-md z-10">
+                        
+                        <!-- Center Spindle Hole -->
+                        <div class="w-5 h-5 bg-slate-900 rounded-full z-20 border-2 border-slate-700 flex items-center justify-center">
+                            <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+                        </div>
+                    </div>
+                    <!-- On-Air Badge -->
+                    <span class="absolute top-2 left-2 bg-rose-600 text-white text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full tracking-wider shadow-lg">
+                        <i class="fa-solid fa-circle text-[8px] mr-1 animate-ping"></i> EN VIVO
+                    </span>
+                </div>
+
+                <!-- Track Meta & Visualizer Controls -->
+                <div class="flex-1 text-center md:text-left flex flex-col justify-between w-full">
+                    <div>
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
+                            <span id="currentGenreBadge" class="text-xs px-3 py-1 rounded-full bg-brand-500/20 text-brand-300 font-semibold border border-brand-500/30">
+                                Tropical
+                            </span>
+                            <span id="bitrateBadge" class="text-xs px-2 py-1 rounded bg-slate-800/80 text-slate-400 font-mono">
+                                320 kbps HD
+                            </span>
+                        </div>
+                        <h2 id="heroSongTitle" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight line-clamp-1">
+                            Cumbia de la Vida ONLINE
+                        </h2>
+                        <p id="heroArtistTitle" class="text-slate-300 text-sm sm:text-base font-medium mt-1">
+                            El Abuelo & Los Reyes Tropicales
+                        </p>
+                    </div>
+
+                    <!-- Audio Frequency Equalizer Bar Canvas -->
+                    <div class="my-5 bg-slate-950/60 p-3 rounded-2xl border border-slate-800 flex items-end justify-between h-16 gap-1 px-4">
+                        <div class="eq-bar w-full bg-gradient-to-t from-brand-600 to-brand-accent rounded-t transition-all duration-150" style="height: 35%;"></div>
+                        <div class="eq-bar w-full bg-gradient-to-t from-brand-600 to-brand-accent rounded-t transition-all duration-150" style="height: 65%;"></div>
+                        <div class="eq-bar w-full bg-gradient-to-t from-brand-600 to-brand-accent rounded-t transition-all duration-150" style="height: 90%;"></div>
+                        <div class="eq-bar w-full bg-gradient-to-t from-brand-600 to-brand-accent rounded-t transition-all duration-150" style="height: 45%;"></div>
+                        <div class="eq-bar w-full bg-gradient-to-t from-brand-600 to-brand-accent rounded-t transition-all duration-150" style="height: 75%;"></div>
+                        <div class="eq-bar w-full bg-gradient-to-t from-brand-600 to-brand-accent rounded-t transition-all duration-150" style="height: 100%;"></div>
+                        <div class="eq-bar w-full bg-gradient-to-t from-brand-600 to-brand-accent rounded-t transition-all duration-150" style="height: 55%;"></div>
+                        <div class="eq-bar w-full bg-gradient-to-t from-brand-600 to-brand-accent rounded-t transition-all duration-150" style="height: 80%;"></div>
+                        <div class="eq-bar w-full bg-gradient-to-t from-brand-600 to-brand-accent rounded-t transition-all duration-150" style="height: 40%;"></div>
+                        <div class="eq-bar w-full bg-gradient-to-t from-brand-600 to-brand-accent rounded-t transition-all duration-150" style="height: 70%;"></div>
+                    </div>
+
+                    <!-- Primary Action Buttons -->
+                    <div class="flex items-center justify-center md:justify-start gap-4">
+                        <button onclick="togglePlay()" id="mainPlayBtn" class="flex items-center gap-2 bg-gradient-to-r from-brand-500 to-rose-600 hover:from-brand-600 hover:to-rose-700 text-white font-bold px-6 py-3 rounded-full shadow-lg shadow-brand-500/30 transition transform active:scale-95">
+                            <i id="mainPlayIcon" class="fa-solid fa-play text-lg"></i>
+                            <span id="mainPlayText">Reproducir Ahora</span>
+                        </button>
+                        <button onclick="nextTrack()" class="w-12 h-12 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center justify-center border border-slate-700 transition">
+                            <i class="fa-solid fa-forward-step text-base"></i>
+                        </button>
+                        <button onclick="toggleFavoriteCurrent()" id="favCurrentBtn" class="w-12 h-12 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-rose-500 flex items-center justify-center border border-slate-700 transition">
+                            <i class="fa-solid fa-heart text-base"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GENRES SELECTION (INSTANT SWITCHING) -->
+            <div class="glass-panel p-5 rounded-2xl">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-slate-200 flex items-center gap-2 text-base">
+                        <i class="fa-solid fa-sliders text-brand-500"></i> Selecciona un Género Musical
+                    </h3>
+                    <span class="text-xs text-brand-400 bg-brand-950/80 px-2.5 py-1 rounded-full border border-brand-800/50">
+                        ¡Cambio e inicio automático!
+                    </span>
+                </div>
+                
+                <!-- Category Buttons Grid -->
+                <div id="genresContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <!-- Dynamic genre tabs will be rendered here -->
+                </div>
+            </div>
+
+            <!-- MUSIC PLAYLIST / SEARCH RESULTS -->
+            <div class="glass-panel p-5 rounded-2xl">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-slate-200 flex items-center gap-2 text-base">
+                        <i class="fa-solid fa-compact-disc text-brand-accent"></i> Canciones Disponibles
+                    </h3>
+                    <span id="trackCountLabel" class="text-xs text-slate-400">
+                        Mostrando 0 temas
+                    </span>
+                </div>
+
+                <div id="trackListContainer" class="space-y-2 max-h-96 overflow-y-auto pr-1">
+                    <!-- Dynamic Song Items -->
+                </div>
+            </div>
+
+        </section>
+
+        <!-- RIGHT COLUMN: COMMUNITY CHAT & SCHEDULE (4 COLUMNS) -->
+        <section class="lg:col-span-4 flex flex-col gap-6">
+
+            <!-- LIVE COMMUNITY CHAT -->
+            <div class="glass-panel p-5 rounded-2xl flex flex-col h-[420px]">
+                <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
+                    <h3 class="font-bold text-slate-200 flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-comments text-brand-500"></i> Chat de Oyentes ONLINE
+                    </h3>
+                    <span class="flex items-center gap-1.5 text-xs text-emerald-400">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span id="listenerCount">1,420</span> conectados
+                    </span>
+                </div>
+
+                <!-- Messages Feed -->
+                <div id="chatMessages" class="flex-1 overflow-y-auto space-y-3 text-xs pr-1">
+                    <!-- Dynamic Chat Messages -->
+                </div>
+
+                <!-- Chat Input Form -->
+                <form onsubmit="sendChatMessage(event)" class="mt-3 pt-3 border-t border-slate-800 flex gap-2">
+                    <input type="text" id="chatInput" placeholder="Escribe un mensaje a la comunidad..." required
+                           class="flex-1 bg-slate-900 text-xs rounded-xl px-3 py-2 text-slate-200 border border-slate-700/80 focus:outline-none focus:border-brand-500">
+                    <button type="submit" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-3 py-2 rounded-xl transition text-xs">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- 24/7 BROADCAST PROGRAM SCHEDULE -->
+            <div class="glass-panel p-5 rounded-2xl">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-slate-200 flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-calendar-days text-brand-amber"></i> Programación de hoy
+                    </h3>
+                    <span id="scheduleGenreLabel" class="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-brand-400 border border-slate-700">
+                        Todos los Géneros
+                    </span>
+                </div>
+
+                <div id="scheduleContainer" class="space-y-3 text-xs">
+                    <!-- Dynamic Schedule Items -->
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- FIXED BOTTOM PLAYER BAR -->
+    <div class="fixed bottom-0 left-0 w-full z-50 glass-panel border-t border-slate-800 px-4 py-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            
+            <!-- Current Track Info -->
+            <div class="flex items-center gap-3 w-1/4 min-w-[160px]">
+                <img id="footerCover" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=150&q=80" alt="Cover" class="w-11 h-11 rounded-lg object-cover border border-slate-700">
+                <div class="truncate">
+                    <h4 id="footerSongTitle" class="text-xs sm:text-sm font-bold text-white truncate">Cumbia de la Vida ONLINE</h4>
+                    <p id="footerArtistName" class="text-[11px] text-slate-400 truncate">El Abuelo & Los Reyes Tropicales</p>
+                </div>
+            </div>
+
+            <!-- Controls & Progress Bar -->
+            <div class="flex-1 max-w-xl flex flex-col items-center gap-1.5">
+                <div class="flex items-center gap-4">
+                    <button onclick="prevTrack()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-backward-step text-sm"></i></button>
+                    <button onclick="togglePlay()" id="footerPlayBtn" class="w-9 h-9 rounded-full bg-brand-500 hover:bg-brand-600 text-white flex items-center justify-center shadow-lg transition">
+                        <i id="footerPlayIcon" class="fa-solid fa-play text-xs"></i>
+                    </button>
+                    <button onclick="nextTrack()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-forward-step text-sm"></i></button>
+                </div>
+
+                <!-- Progress Track Bar -->
+                <div class="w-full flex items-center gap-2">
+                    <span id="currentTime" class="text-[10px] font-mono text-slate-400 w-8 text-right">0:00</span>
+                    <div onclick="seekProgress(event)" class="flex-1 h-1.5 bg-slate-800 rounded-full cursor-pointer relative overflow-hidden group">
+                        <div id="progressBar" class="h-full bg-gradient-to-r from-brand-500 to-brand-accent rounded-full w-0 transition-all duration-300"></div>
+                    </div>
+                    <span id="totalTime" class="text-[10px] font-mono text-slate-400 w-8">3:30</span>
+                </div>
+            </div>
+
+            <!-- Volume & Settings -->
+            <div class="flex items-center justify-end gap-3 w-1/4 min-w-[120px]">
+                <button onclick="toggleMute()" class="text-slate-400 hover:text-white"><i id="volumeIcon" class="fa-solid fa-volume-high text-xs"></i></button>
+                <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.8" oninput="changeVolume(this.value)"
+                       class="w-16 sm:w-24 accent-brand-500 bg-slate-800 h-1 rounded-lg cursor-pointer">
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toastContainer" class="fixed top-20 right-4 z-50 flex flex-col gap-2"></div>
+
+    <!-- JAVASCRIPT LOGIC ENGINE -->
+    <script>
+        // MASTER TRACK DATABASE (All Genres)
+        const masterTrackDatabase = [
+            // TROPICAL
+            { id: 1, title: "Cumbia de la Vida ONLINE", artist: "El Abuelo & Los Reyes", genre: "Tropical", cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80", duration: 210, freq: 523.25 },
+            { id: 2, title: "Salsa de Noche", artist: "Combo Sabroson", genre: "Tropical", cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&q=80", duration: 195, freq: 587.33 },
+            { id: 3, title: "Bachata Sensual Neon", artist: "Romeo & Julieta", genre: "Tropical", cover: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&q=80", duration: 220, freq: 659.25 },
+            { id: 4, title: "Merengue Fuego ONLINE", artist: "El Abuelo Band", genre: "Tropical", cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=80", duration: 180, freq: 698.46 },
+
+            // POP & URBANO
+            { id: 5, title: "Baila Conmigo", artist: "Lucía & El Ritmo", genre: "Pop & Urbano", cover: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=400&q=80", duration: 190, freq: 440.00 },
+            { id: 6, title: "Luces de la Ciudad", artist: "El Abuelo Pop Project", genre: "Pop & Urbano", cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&q=80", duration: 205, freq: 493.88 },
+            { id: 7, title: "Estrella Fugaz", artist: "Sofia Star", genre: "Pop & Urbano", cover: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=400&q=80", duration: 215, freq: 392.00 },
+
+            // ROCK & CLÁSICOS
+            { id: 8, title: "Guitarra Eléctrica Nocturna", artist: "Los Vientos del Rock", genre: "Rock & Clásicos", cover: "https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=400&q=80", duration: 240, freq: 329.63 },
+            { id: 9, title: "Leyendas del 80", artist: "El Abuelo Rock Experience", genre: "Rock & Clásicos", cover: "https://images.unsplash.com/photo-1511735111819-9a3f7709049c?w=400&q=80", duration: 260, freq: 293.66 },
+
+            // ELECTRÓNICA
+            { id: 10, title: "Cyber Pulse 2099", artist: "DJ Neon Abuelo", genre: "Electrónica", cover: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=400&q=80", duration: 230, freq: 523.25 },
+            { id: 11, title: "Bassline Galaxy", artist: "Electro Wave", genre: "Electrónica", cover: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&q=80", duration: 210, freq: 587.33 },
+
+            // LOFI & CHILL
+            { id: 12, title: "Lluvia en la Ventana", artist: "Lofi El Abuelo", genre: "Lofi & Chill", cover: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=400&q=80", duration: 175, freq: 261.63 },
+            { id: 13, title: "Café de Media Noche", artist: "Chill Beats Studio", genre: "Lofi & Chill", cover: "https://images.unsplash.com/photo-1445985543468-b42169244731?w=400&q=80", duration: 195, freq: 349.23 },
+
+            // REGGENTON / TRAP
+            { id: 14, title: "Perreo Fuego", artist: "MC El Abuelo", genre: "Reggaeton / Trap", cover: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=400&q=80", duration: 185, freq: 440.00 },
+
+            // JAZZ & BLUES
+            { id: 15, title: "Saxofón Nocturno", artist: "El Abuelo Jazz Quartet", genre: "Jazz & Blues", cover: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=400&q=80", duration: 250, freq: 392.00 }
+        ];
+
+        // GENRES LIST
+        const genresList = ["Todos", "Tropical", "Pop & Urbano", "Rock & Clásicos", "Electrónica", "Lofi & Chill", "Reggaeton / Trap", "Jazz & Blues"];
+
+        // DYNAMIC SCHEDULE DATABASE BY GENRE
+        const scheduleDatabase = {
+            "Todos": [
+                { title: "Mañanas Tropicales & Cumbia", time: "06:00 AM - 12:00 PM", status: "Activo" },
+                { title: "Tarde Urbana, Reggaeton & Pop", time: "12:00 PM - 06:00 PM", status: "Próximo" },
+                { title: "Noche Electrónica & Synthwave", time: "06:00 PM - 00:00 AM", status: "Próximo" },
+                { title: "Madrugada Lofi, Chill & Jazz", time: "00:00 AM - 06:00 AM", status: "Próximo" }
+            ],
+            "Tropical": [
+                { title: "Despertar Sabroso: Cumbia & Cuarteto", time: "06:00 AM - 11:00 AM", status: "Activo" },
+                { title: "Salsa & Bachata al Mediodía", time: "11:00 AM - 04:00 PM", status: "Próximo" },
+                { title: "La Hora del Merengue Fuego", time: "04:00 PM - 09:00 PM", status: "Próximo" },
+                { title: "Fiesta Tropical ONLINE", time: "09:00 PM - 06:00 AM", status: "Próximo" }
+            ],
+            "Pop & Urbano": [
+                { title: "Morning Hits & Pop Global", time: "07:00 AM - 12:00 PM", status: "Activo" },
+                { title: "Éxitos del Momento & Tendencias", time: "12:00 PM - 05:00 PM", status: "Próximo" },
+                { title: "Pop Latino & Urban Mix", time: "05:00 PM - 10:00 PM", status: "Próximo" },
+                { title: "Sessiones Remixed Night", time: "10:00 PM - 07:00 AM", status: "Próximo" }
+            ],
+            "Rock & Clásicos": [
+                { title: "Mañanas de Clásicos del 80 & 90", time: "06:00 AM - 12:00 PM", status: "Activo" },
+                { title: "Rock Nacional & Auténtico", time: "12:00 PM - 05:00 PM", status: "Próximo" },
+                { title: "Guitarras de Leyenda & Hard Rock", time: "05:00 PM - 10:00 PM", status: "Próximo" },
+                { title: "Baladas de Rock Nocturnas", time: "10:00 PM - 06:00 AM", status: "Próximo" }
+            ],
+            "Electrónica": [
+                { title: "Deep House & Morning Grooves", time: "08:00 AM - 01:00 PM", status: "Activo" },
+                { title: "Cyber Electro & Future Bass", time: "01:00 PM - 06:00 PM", status: "Próximo" },
+                { title: "EDM Mainstage & Festival Beats", time: "06:00 PM - 11:00 PM", status: "Próximo" },
+                { title: "Techno & Synthwave ONLINE Rave", time: "11:00 PM - 08:00 AM", status: "Próximo" }
+            ],
+            "Lofi & Chill": [
+                { title: "Lofi Beats para Estudiar y Concentrarse", time: "06:00 AM - 01:00 PM", status: "Activo" },
+                { title: "Chillhop & Tarde Relajante", time: "01:00 PM - 07:00 PM", status: "Próximo" },
+                { title: "Ambient & Melodías Suaves", time: "07:00 PM - 00:00 AM", status: "Próximo" },
+                { title: "Midnight Sleep Lofi ONLINE", time: "00:00 AM - 06:00 AM", status: "Próximo" }
+            ],
+            "Reggaeton / Trap": [
+                { title: "El Mañanero Urbano & Dembow", time: "08:00 AM - 01:00 PM", status: "Activo" },
+                { title: "Perreo Clásico & Éxitos Old School", time: "01:00 PM - 06:00 PM", status: "Próximo" },
+                { title: "Trap Latino & Tendencias", time: "06:00 PM - 11:00 PM", status: "Próximo" },
+                { title: "Noche de Boliche & Reggaeton ONLINE", time: "11:00 PM - 08:00 AM", status: "Próximo" }
+            ],
+            "Jazz & Blues": [
+                { title: "Café, Saxofón & Jazz Matutino", time: "07:00 AM - 12:00 PM", status: "Activo" },
+                { title: "Smooth Jazz & Bossa Nova", time: "12:00 PM - 05:00 PM", status: "Próximo" },
+                { title: "Blues Nocturno & Jam Sessions", time: "05:00 PM - 10:00 PM", status: "Próximo" },
+                { title: "Jazz de Medianoche & Vinilos", time: "10:00 PM - 07:00 AM", status: "Próximo" }
+            ]
+        };
+
+        // STATE VARIABLES
+        let activeGenre = "Todos";
+        let activePlaylist = [...masterTrackDatabase];
+        let currentTrackIndex = 0;
+        let isPlaying = false;
+        let isRadioMode = true; // Radio ONLINE vs On-Demand
+        let favoriteTrackIds = [];
+        let currentTimeSeconds = 0;
+        let trackTimerInterval = null;
+        let audioCtx = null;
+        let currentOscillator = null;
+
+        // INITIALIZATION ON LOAD
+        window.onload = function () {
+            renderGenreTabs();
+            renderSchedule();
+            renderTrackList();
+            loadTrack(0);
+            initChatSim();
+            setInterval(updateEqualizerVisualizer, 150);
+        };
+
+        // RENDER GENRE TABS
+        function renderGenreTabs() {
+            const container = document.getElementById('genresContainer');
+            container.innerHTML = genresList.map(genre => {
+                const isActive = activeGenre === genre;
+                return `
+                    <button onclick="filterByGenre('${genre}')" 
+                            class="px-3 py-2.5 rounded-xl font-semibold text-xs transition-all flex items-center justify-between border ${
+                                isActive 
+                                ? 'bg-gradient-to-r from-brand-600 to-rose-600 text-white border-brand-500 shadow-lg shadow-brand-500/30 scale-[1.02]' 
+                                : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700 hover:text-white hover:bg-slate-800/60'
+                            }">
+                        <span>${genre}</span>
+                        ${isActive ? '<i class="fa-solid fa-compact-disc animate-spin text-white text-xs"></i>' : '<i class="fa-solid fa-chevron-right text-[10px] opacity-40"></i>'}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        // RENDER DYNAMIC SCHEDULE BY GENRE
+        function renderSchedule() {
+            const container = document.getElementById('scheduleContainer');
+            const label = document.getElementById('scheduleGenreLabel');
+            label.innerText = activeGenre;
+
+            const slots = scheduleDatabase[activeGenre] || scheduleDatabase["Todos"];
+            container.innerHTML = slots.map(slot => `
+                <div class="p-2.5 rounded-xl ${slot.status === 'Activo' ? 'bg-slate-900/90 border-brand-500/40' : 'bg-slate-900/40 border-slate-800/60 opacity-80'} border flex items-center justify-between transition-all duration-300">
+                    <div>
+                        <p class="font-semibold text-slate-200">${slot.title}</p>
+                        <p class="text-slate-400 text-[11px]">${slot.time}</p>
+                    </div>
+                    <span class="px-2 py-0.5 rounded ${slot.status === 'Activo' ? 'bg-brand-500/20 text-brand-400 border border-brand-500/30' : 'bg-slate-800 text-slate-400'} text-[10px] font-semibold">
+                        ${slot.status}
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        // FILTER GENRE AND AUTOMATICALLY PLAY FIRST TRACK
+        function filterByGenre(genre) {
+            activeGenre = genre;
+            renderGenreTabs();
+            renderSchedule();
+            
+            if (genre === "Todos") {
+                activePlaylist = [...masterTrackDatabase];
+            } else {
+                activePlaylist = masterTrackDatabase.filter(t => t.genre === genre);
+            }
+            
+            renderTrackList();
+            showToast("Género Seleccionado", `Cargando programación y temas de: ${genre}`);
+
+            // INSTANT AUTOMATIC PLAYBACK ON GENRE SELECT
+            if (activePlaylist.length > 0) {
+                loadTrack(0);
+                isPlaying = true;
+                updatePlayPauseState();
+            }
+        }
+
+        // RENDER SONG LIST
+        function renderTrackList() {
+            const container = document.getElementById('trackListContainer');
+            document.getElementById('trackCountLabel').innerText = `Mostrando ${activePlaylist.length} temas`;
+
+            if(activePlaylist.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-slate-500 text-xs">No se encontraron canciones en esta categoría.</div>`;
+                return;
+            }
+
+            container.innerHTML = activePlaylist.map((track, idx) => {
+                const isCurrent = idx === currentTrackIndex;
+                const isFav = favoriteTrackIds.includes(track.id);
+
+                return `
+                    <div onclick="playTrackById(${track.id})" 
+                         class="p-2.5 rounded-xl border flex items-center justify-between gap-3 cursor-pointer transition ${
+                             isCurrent 
+                             ? 'bg-brand-950/70 border-brand-500/50 text-white' 
+                             : 'bg-slate-900/50 border-slate-800/60 text-slate-300 hover:bg-slate-800/70'
+                         }">
+                        
+                        <div class="flex items-center gap-3 truncate">
+                            <img src="${track.cover}" class="w-10 h-10 rounded-lg object-cover">
+                            <div class="truncate">
+                                <h4 class="font-semibold text-xs text-slate-100 truncate flex items-center gap-1.5">
+                                    ${track.title}
+                                    ${isCurrent ? '<i class="fa-solid fa-volume-high text-brand-400 text-[10px] animate-pulse"></i>' : ''}
+                                </h4>
+                                <p class="text-[11px] text-slate-400 truncate">${track.artist} • <span class="text-brand-400/80">${track.genre}</span></p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 shrink-0">
+                            <button onclick="event.stopPropagation(); toggleFavorite(${track.id})" class="text-xs p-1.5 text-slate-500 hover:text-rose-500 transition">
+                                <i class="fa-solid fa-heart ${isFav ? 'text-rose-500' : ''}"></i>
+                            </button>
+                            <span class="text-[11px] font-mono text-slate-500">${formatTime(track.duration)}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // PLAY SPECIFIC TRACK BY ID
+        function playTrackById(id) {
+            const index = activePlaylist.findIndex(t => t.id === id);
+            if(index !== -1) {
+                loadTrack(index);
+                isPlaying = true;
+                updatePlayPauseState();
+                showToast("Reproduciendo", `${activePlaylist[index].title} - ${activePlaylist[index].artist}`);
+            }
+        }
+
+        // LOAD TRACK DATA INTO UI
+        function loadTrack(index) {
+            currentTrackIndex = index;
+            const track = activePlaylist[currentTrackIndex];
+            if(!track) return;
+
+            document.getElementById('heroSongTitle').innerText = track.title;
+            document.getElementById('heroArtistTitle').innerText = track.artist;
+            document.getElementById('heroCoverArt').src = track.cover;
+            document.getElementById('currentGenreBadge').innerText = track.genre;
+
+            document.getElementById('footerSongTitle').innerText = track.title;
+            document.getElementById('footerArtistName').innerText = track.artist;
+            document.getElementById('footerCover').src = track.cover;
+
+            document.getElementById('totalTime').innerText = formatTime(track.duration);
+            currentTimeSeconds = 0;
+            updateProgressBar();
+            updateFavoriteBtnUI();
+            renderTrackList();
+
+            if (isPlaying) {
+                playAudioSynth(track.freq || 440);
+            }
+        }
+
+        // PLAY / PAUSE TOGGLE
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            updatePlayPauseState();
+        }
+
+        function updatePlayPauseState() {
+            const vinyl = document.getElementById('vinylDisc');
+            const mainIcon = document.getElementById('mainPlayIcon');
+            const mainText = document.getElementById('mainPlayText');
+            const footerIcon = document.getElementById('footerPlayIcon');
+
+            if (isPlaying) {
+                vinyl.classList.remove('vinyl-paused');
+                mainIcon.className = "fa-solid fa-pause text-lg";
+                mainText.innerText = "Pausar";
+                footerIcon.className = "fa-solid fa-pause text-xs";
+                
+                const track = activePlaylist[currentTrackIndex];
+                if(track) playAudioSynth(track.freq);
+
+                startTimer();
+            } else {
+                vinyl.classList.add('vinyl-paused');
+                mainIcon.className = "fa-solid fa-play text-lg";
+                mainText.innerText = "Reproducir Ahora";
+                footerIcon.className = "fa-solid fa-play text-xs";
+                
+                stopAudioSynth();
+                stopTimer();
+            }
+        }
+
+        // TIMER & AUTOMATIC SONG PROGRESSION
+        function startTimer() {
+            stopTimer();
+            trackTimerInterval = setInterval(() => {
+                const track = activePlaylist[currentTrackIndex];
+                if(!track) return;
+
+                currentTimeSeconds++;
+                updateProgressBar();
+
+                if (currentTimeSeconds >= track.duration) {
+                    nextTrack(); // Auto next track when finished
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if(trackTimerInterval) clearInterval(trackTimerInterval);
+        }
+
+        function updateProgressBar() {
+            const track = activePlaylist[currentTrackIndex];
+            if(!track) return;
+
+            const percentage = (currentTimeSeconds / track.duration) * 100;
+            document.getElementById('progressBar').style.width = `${percentage}%`;
+            document.getElementById('currentTime').innerText = formatTime(currentTimeSeconds);
+        }
+
+        function seekProgress(e) {
+            const track = activePlaylist[currentTrackIndex];
+            if(!track) return;
+            const bar = e.currentTarget;
+            const clickPosition = (e.pageX - bar.getBoundingClientRect().left) / bar.offsetWidth;
+            currentTimeSeconds = Math.floor(clickPosition * track.duration);
+            updateProgressBar();
+        }
+
+        // TRACK NAVIGATION
+        function nextTrack() {
+            if (activePlaylist.length === 0) return;
+            let nextIndex = currentTrackIndex + 1;
+            if (nextIndex >= activePlaylist.length) nextIndex = 0;
+            loadTrack(nextIndex);
+            isPlaying = true;
+            updatePlayPauseState();
+        }
+
+        function prevTrack() {
+            if (activePlaylist.length === 0) return;
+            let prevIndex = currentTrackIndex - 1;
+            if (prevIndex < 0) prevIndex = activePlaylist.length - 1;
+            loadTrack(prevIndex);
+            isPlaying = true;
+            updatePlayPauseState();
+        }
+
+        // SEARCH ENGINE
+        function handleSearch(query) {
+            const q = query.toLowerCase().trim();
+            if(!q) {
+                activePlaylist = activeGenre === "Todos" 
+                    ? [...masterTrackDatabase] 
+                    : masterTrackDatabase.filter(t => t.genre === activeGenre);
+            } else {
+                activePlaylist = masterTrackDatabase.filter(t => 
+                    t.title.toLowerCase().includes(q) || 
+                    t.artist.toLowerCase().includes(q) || 
+                    t.genre.toLowerCase().includes(q)
+                );
+            }
+            renderTrackList();
+        }
+
+        // FAVORITES SYSTEM
+        function toggleFavorite(id) {
+            if (favoriteTrackIds.includes(id)) {
+                favoriteTrackIds = favoriteTrackIds.filter(fId => fId !== id);
+                showToast("Favorito", "Eliminado de tus canciones favoritas.");
+            } else {
+                favoriteTrackIds.push(id);
+                showToast("Favorito", "Guardado en tus canciones favoritas.");
+            }
+            updateFavoriteBtnUI();
+            renderTrackList();
+        }
+
+        function toggleFavoriteCurrent() {
+            const track = activePlaylist[currentTrackIndex];
+            if(track) toggleFavorite(track.id);
+        }
+
+        function updateFavoriteBtnUI() {
+            const track = activePlaylist[currentTrackIndex];
+            const btn = document.getElementById('favCurrentBtn');
+            if(track && favoriteTrackIds.includes(track.id)) {
+                btn.className = "w-12 h-12 rounded-full bg-rose-600/20 text-rose-500 flex items-center justify-center border border-rose-500/40 transition";
+            } else {
+                btn.className = "w-12 h-12 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-rose-500 flex items-center justify-center border border-slate-700 transition";
+            }
+        }
+
+        // RADIO VS ON-DEMAND MODE
+        function toggleRadioMode() {
+            isRadioMode = !isRadioMode;
+            const text = document.getElementById('modeText');
+            const btn = document.getElementById('modeToggleBtn');
+
+            if(isRadioMode) {
+                text.innerText = "Modo Radio ONLINE";
+                btn.className = "flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-brand-500/20 text-brand-400 border border-brand-500/40 hover:bg-brand-500/30 transition";
+                showToast("Modo Radio", "Transmisión continua ONLINE activada.");
+            } else {
+                text.innerText = "Modo DJ Personalizado";
+                btn.className = "flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-brand-accent/20 text-brand-accent border border-brand-accent/40 hover:bg-brand-accent/30 transition";
+                showToast("Modo DJ", "Ahora tienes control total a pedido.");
+            }
+        }
+
+        // EQUALIZER ANIMATION VISUALIZER
+        function updateEqualizerVisualizer() {
+            const bars = document.querySelectorAll('.eq-bar');
+            bars.forEach(bar => {
+                if (isPlaying) {
+                    const randomHeight = Math.floor(Math.random() * 85) + 15;
+                    bar.style.height = `${randomHeight}%`;
+                } else {
+                    bar.style.height = '15%';
+                }
+            });
+        }
+
+        // VOLUME CONTROLS
+        function changeVolume(val) {
+            const icon = document.getElementById('volumeIcon');
+            if(val == 0) {
+                icon.className = "fa-solid fa-volume-xmark text-xs text-rose-500";
+            } else if(val < 0.5) {
+                icon.className = "fa-solid fa-volume-low text-xs";
+            } else {
+                icon.className = "fa-solid fa-volume-high text-xs";
+            }
+            if(currentOscillator && isPlaying) {
+                const track = activePlaylist[currentTrackIndex];
+                if(track) playAudioSynth(track.freq);
+            }
+        }
+
+        // WEB AUDIO SYNTHESIZER ENGINE
+        function playAudioSynth(frequency = 440) {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                stopAudioSynth();
+
+                const val = parseFloat(document.getElementById('volumeSlider').value || 0.8);
+                if (val <= 0) return;
+
+                currentOscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                currentOscillator.type = 'sine';
+                currentOscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+
+                gainNode.gain.setValueAtTime(val * 0.1, audioCtx.currentTime);
+
+                currentOscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                currentOscillator.start();
+            } catch (err) {
+                console.warn("Audio Context init fallback", err);
+            }
+        }
+
+        function stopAudioSynth() {
+            if (currentOscillator) {
+                try {
+                    currentOscillator.stop();
+                    currentOscillator.disconnect();
+                } catch(e) {}
+                currentOscillator = null;
+            }
+        }
+
+        function toggleMute() {
+            const slider = document.getElementById('volumeSlider');
+            if (slider.value > 0) {
+                slider.dataset.oldVal = slider.value;
+                slider.value = 0;
+            } else {
+                slider.value = slider.dataset.oldVal || 0.8;
+            }
+            changeVolume(slider.value);
+        }
+
+        // SIMULATED LIVE COMMUNITY CHAT
+        const simulatedUsers = ["Carlos_Salsa", "Martina_Electro", "AbueloFan99", "Lucía_Rock", "Dj_Beto", "Sofia_Lofi"];
+        const simulatedMessages = [
+            "¡Qué buena selección suena a esta hora en El Abuelo Radio! 🎶",
+            "¡Saludos a toda la comunidad desde Argentina! 👋",
+            "Suban el volumen que este tema es un temazo 💥",
+            "La programación ONLINE de El Abuelo Radio nunca falla. 🔥",
+            "¡Excelente sonido y sin interrupciones! 🚀"
+        ];
+
+        function initChatSim() {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = `
+                <div class="bg-slate-900/60 p-2.5 rounded-xl border border-slate-800">
+                    <span class="font-bold text-brand-400">DJ El Abuelo Bot:</span>
+                    <span class="text-slate-300">¡Bienvenidos a El Abuelo Radio ONLINE! Selecciona tu género o programa favorito.</span>
+                </div>
+            `;
+
+            // Interval to auto-generate simulated user chats
+            setInterval(() => {
+                const user = simulatedUsers[Math.floor(Math.random() * simulatedUsers.length)];
+                const msg = simulatedMessages[Math.floor(Math.random() * simulatedMessages.length)];
+                addChatMessage(user, msg);
+            }, 12000);
+        }
+
+        function addChatMessage(user, message) {
+            const container = document.getElementById('chatMessages');
+            const msgEl = document.createElement('div');
+            msgEl.className = "bg-slate-900/60 p-2.5 rounded-xl border border-slate-800 animate-fade-in";
+            msgEl.innerHTML = `
+                <span class="font-bold text-brand-400">${user}:</span>
+                <span class="text-slate-300">${escapeHtml(message)}</span>
+            `;
+            container.appendChild(msgEl);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendChatMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatInput');
+            const val = input.value.trim();
+            if(val) {
+                addChatMessage("Tú", val);
+                input.value = "";
+            }
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/[&<"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
+        }
+
+        // TOAST NOTIFICATIONS SYSTEM
+        function showToast(title, message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = "glass-panel px-4 py-3 rounded-2xl shadow-xl border border-brand-500/40 text-xs flex items-center gap-3 transition-all transform duration-300 translate-x-full";
+            toast.innerHTML = `
+                <div class="w-7 h-7 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center shrink-0 border border-brand-500/30">
+                    <i class="fa-solid fa-bell"></i>
+                </div>
+                <div>
+                    <h5 class="font-bold text-white">${title}</h5>
+                    <p class="text-slate-300 text-[11px]">${message}</p>
+                </div>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-full');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // TIME FORMATTER UTIL
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+    </script>
+</body>
+</html>
