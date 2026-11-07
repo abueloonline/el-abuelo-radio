@@ -242,13 +242,13 @@
 
     <!-- AUDIO ENGINE & CHAT SCRIPT -->
     <script>
-        // Cada género es una estación de radio independiente con transmisiones HTTPS en vivo y estables
+        // Cada género es una estación de radio independiente con transmisiones HTTPS de alta disponibilidad
         const masterTrackDatabase = [
-            { id: 1, title: "Radio Cumbia & Tropi", artist: "Tropical FM En Vivo", genre: "Cumbia & Tropical", cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80", streamUrl: "https://stream.zeno.fm/f3wvbbqmdg8uv" },
-            { id: 2, title: "Salsa & Son Latino", artist: "Salsa Radio International", genre: "Salsa & Son", cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&q=80", streamUrl: "https://stream.zeno.fm/0r26w140308uv" },
-            { id: 3, title: "Rock Nacional & Hits 80s", artist: "Rock Classic Online", genre: "Rock & Clásicos", cover: "https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=400&q=80", streamUrl: "https://stream.zeno.fm/uq6y23844d0uv" },
-            { id: 4, title: "Top Pop & Urban Hits", artist: "Pop FM Top Hits", genre: "Pop & Urbano", cover: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=400&q=80", streamUrl: "https://stream.zeno.fm/u2768be67v8uv" },
-            { id: 5, title: "Lofi Beats & Chill", artist: "Lofi Radio 24/7", genre: "Lofi & Chill", cover: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=400&q=80", streamUrl: "https://stream.zeno.fm/05477838584uv" }
+            { id: 1, title: "Radio Cumbia & Tropi", artist: "Cumbia FM En Vivo", genre: "Cumbia & Tropical", cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80", streamUrl: "https://stream.zeno.fm/f3wvbbqmdg8uv" },
+            { id: 2, title: "Salsa & Son Latino", artist: "Salsa Radio En Vivo", genre: "Salsa & Son", cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&q=80", streamUrl: "https://stream.zeno.fm/0r26w140308uv" },
+            { id: 3, title: "Rock Nacional & Hits", artist: "Rock FM 24hs", genre: "Rock & Clásicos", cover: "https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=400&q=80", streamUrl: "https://stream.zeno.fm/uq6y23844d0uv" },
+            { id: 4, title: "Top Pop & Urban Hits", artist: "Pop Planet Radio", genre: "Pop & Urbano", cover: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=400&q=80", streamUrl: "https://stream.zeno.fm/u2768be67v8uv" },
+            { id: 5, title: "Lofi Beats & Chill 24/7", artist: "Lofi Station Online", genre: "Lofi & Chill", cover: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=400&q=80", streamUrl: "https://stream.zeno.fm/05477838584uv" }
         ];
 
         // Programación interactiva de cada emisora
@@ -283,15 +283,16 @@
         let currentTrackIndex = 0;
         let isPlaying = false;
         let realAudio = new Audio();
+        realAudio.crossOrigin = "anonymous";
+        
         let currentUserId = 'user_' + Math.random().toString(36).substr(2, 7);
         const chatChannel = new BroadcastChannel('el_abuelo_radio_real_chat');
         const presenceChannel = new BroadcastChannel('el_abuelo_radio_presence');
-        let localMessages = [];
         let activePeers = new Set([currentUserId]);
 
         window.onload = function () {
             renderGenreTabs();
-            loadTrack(0);
+            loadTrack(0, false);
             initChat();
             initPresence();
             setInterval(updateEqualizerVisualizer, 150);
@@ -324,11 +325,11 @@
             }).join('');
         }
 
-        // Al hacer clic en una emisora, sintoniza la radio elegida y actualiza su guía y audio al instante
+        // Al hacer clic en una emisora, sintoniza la radio elegida y reproduce inmediatamente
         function selectStation(index) {
             currentTrackIndex = index;
             renderGenreTabs();
-            loadTrack(index);
+            loadTrack(index, true);
         }
 
         function filterByGenre(genre) {
@@ -338,7 +339,7 @@
             }
         }
 
-        function loadTrack(index) {
+        function loadTrack(index, autoPlay = true) {
             currentTrackIndex = index;
             const track = masterTrackDatabase[currentTrackIndex];
             if (!track) return;
@@ -355,16 +356,23 @@
             // Actualizar guía de programación según la emisora seleccionada
             renderSchedule(track.genre);
 
-            // Reiniciar elemento de audio con la nueva URL de streaming
-            realAudio.pause();
-            realAudio.currentTime = 0;
-            realAudio.src = track.streamUrl;
-            realAudio.load();
+            // Detener y resetear el reproductor antes de cargar el nuevo stream
+            try {
+                realAudio.pause();
+                realAudio.src = "";
+            } catch(e) {}
+
+            realAudio = new Audio(track.streamUrl);
+            realAudio.crossOrigin = "anonymous";
             realAudio.volume = parseFloat(document.getElementById('volumeSlider').value || 0.8);
 
-            // Forzar reproducción al cambiar de emisora
-            isPlaying = true;
-            updatePlayPauseState();
+            if (autoPlay) {
+                isPlaying = true;
+                updatePlayPauseState();
+            } else {
+                isPlaying = false;
+                updatePlayPauseState();
+            }
         }
 
         // Render schedule based on selected musical station
@@ -410,9 +418,12 @@
                 if (mainText) mainText.innerText = "Pausar";
                 if (footerIcon) footerIcon.className = "fa-solid fa-pause text-xs";
                 
-                realAudio.play().catch(err => {
-                    console.log("Audio requires click activation:", err);
-                });
+                const playPromise = realAudio.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(err => {
+                        console.log("Audio play blocked/error:", err);
+                    });
+                }
             } else {
                 if (vinyl) vinyl.classList.add('vinyl-paused');
                 if (mainIcon) mainIcon.className = "fa-solid fa-play text-lg";
@@ -435,7 +446,7 @@
 
         function changeVolume(val) {
             const icon = document.getElementById('volumeIcon');
-            realAudio.volume = val;
+            realAudio.volume = parseFloat(val);
             if (!icon) return;
             if (val == 0) {
                 icon.className = "fa-solid fa-volume-xmark text-xs text-rose-500";
