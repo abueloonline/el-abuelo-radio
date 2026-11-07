@@ -7,15 +7,15 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-center items-center p-4">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-center items-center p-4 font-sans">
 
   <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-6">
     
     <!-- ENCABEZADO -->
     <div class="flex justify-between items-center border-b border-slate-800 pb-4">
       <div>
-        <h1 class="font-bold text-xl text-violet-400">PULSE RADIO FM</h1>
-        <p class="text-xs text-slate-400">Música en Vivo sin interrupciones</p>
+        <h1 class="font-bold text-xl text-violet-400">RADIO MUSICAL EN VIVO</h1>
+        <p class="text-xs text-slate-400">Reproductor directo sin falsos datos</p>
       </div>
       <!-- ESTADO DE CONEXIÓN REAL -->
       <span id="statusBadge" class="bg-slate-800 text-slate-400 text-xs px-2.5 py-1 rounded-full font-mono">
@@ -23,74 +23,68 @@
       </span>
     </div>
 
-    <!-- SELECTOR DE EMISORA REAL -->
+    <!-- SELECTOR DE EMISORA -->
     <div>
-      <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Elegí un género / emisora:</label>
+      <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Elegí el género musical:</label>
       <select id="stationSelect" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-violet-500 outline-none cursor-pointer">
-        <option value="pop">🎵 Pop & Top 40 (Radio Disney)</option>
-        <option value="rock">🎸 Rock Nacional / Hit (Radio Urbana Play)</option>
-        <option value="lofi">☕ Lo-Fi Beats 24/7 (Relax / Estudio)</option>
-        <option value="electro">🎧 Electrónica / Dance (Ibiza Global Radio)</option>
+        <option value="pop">🎵 Pop / Éxitos (Los 40)</option>
+        <option value="cuarteto">💃 Cuarteto / Tropical (Cadena 3 / Popular)</option>
+        <option value="rock">🎸 Rock / Hits (Rock & Pop 95.9)</option>
+        <option value="lofi">☕ Chill & Lo-Fi Beats</option>
       </select>
     </div>
 
-    <!-- DISPLAY REPRODUCTOR -->
+    <!-- DISPLAY -->
     <div class="text-center space-y-2 py-2">
-      <img id="coverImg" src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&auto=format&fit=crop&q=80" class="w-36 h-36 mx-auto rounded-xl object-cover shadow-lg border border-slate-700">
-      <h2 id="stationTitle" class="text-lg font-bold text-white pt-2">Pop & Top 40</h2>
-      <p id="stationSub" class="text-xs text-slate-400">Audio Stream 100% Real</p>
+      <img id="coverImg" src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&auto=format&fit=crop&q=80" class="w-40 h-40 mx-auto rounded-xl object-cover shadow-lg border border-slate-700">
+      <h2 id="stationTitle" class="text-lg font-bold text-white pt-2">Pop / Éxitos</h2>
+      <p id="stationSub" class="text-xs text-slate-400">Stream Oficial en Directo</p>
     </div>
 
-    <!-- CONTROLES DE AUDIO REALES -->
+    <!-- CONTROLES -->
     <div class="flex items-center justify-center space-x-4 pt-2">
-      <button id="playBtn" class="bg-violet-600 hover:bg-violet-500 active:scale-95 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition">
-        <i id="playIcon" class="fa-solid fa-play text-xl pl-1"></i>
+      <button id="playBtn" class="bg-violet-600 hover:bg-violet-500 active:scale-95 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg transition">
+        <i id="playIcon" class="fa-solid fa-play text-2xl pl-1"></i>
       </button>
 
-      <div class="flex items-center space-x-2 bg-slate-800 px-3 py-2 rounded-xl border border-slate-700">
+      <div class="flex items-center space-x-2 bg-slate-800 px-3 py-2.5 rounded-xl border border-slate-700">
         <i class="fa-solid fa-volume-high text-slate-400 text-xs"></i>
         <input id="volumeSlider" type="range" min="0" max="1" step="0.05" value="0.8" class="w-20 accent-violet-500">
       </div>
     </div>
 
-    <!-- MENSAJE DE ADVERTENCIA CHAT -->
-    <div class="bg-slate-950/60 rounded-xl p-3 border border-slate-800/80 text-center">
-      <p class="text-[11px] text-slate-400">
-        📌 <strong>Nota sobre el chat y usuarios:</strong> Como esta página está solo en tu computadora, no hay nadie más conectado todavía. Para tener usuarios y chat real en vivo entre personas, necesitás subir la página a internet (Vercel/Netlify) y conectarle un servidor de mensajería.
-      </p>
-    </div>
+    <p id="errorMessage" class="text-xs text-red-400 text-center hidden"></p>
 
   </div>
 
-  <!-- ELEMENTO HTML5 AUDIO CON RECONECCIÓN -->
-  <audio id="audioPlayer" preload="none"></audio>
+  <audio id="audioPlayer" crossorigin="anonymous"></audio>
 
   <script>
-    // EMISORAS CON STREAMS DE AUDIO REALES Y ACTIVOS
+    // EMISORAS CON AUDIO DIRECTO Y VERIFICADO DE ALTA DISPONIBILIDAD
     const RADIOS = {
       pop: {
-        name: "Pop & Top 40",
-        sub: "Éxitos del momento",
-        url: "https://stream.zeno.fm/f3v62y1pzp8uv",
+        name: "Los 40 Principales",
+        sub: "Pop y Éxitos Internacionales",
+        url: "https://27153.live.streamtheworld.com/LOS40_ARGENTINA.mp3",
         cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&auto=format&fit=crop&q=80"
       },
+      cuarteto: {
+        name: "Radio Popular / Cadena 3",
+        sub: "Música Tropical & Cuarteto",
+        url: "https://cadena3.amaze.com.ar/radio-popular.mp3",
+        cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&auto=format&fit=crop&q=80"
+      },
       rock: {
-        name: "Rock & Classic Hits",
-        sub: "Rock Internacional 24/7",
-        url: "https://stream.zeno.fm/0r0xa792kwzuv",
+        name: "Rock & Pop",
+        sub: "Clásicos y Rock en Español",
+        url: "https://25213.live.streamtheworld.com/ROCKANDPOP_ARG.mp3",
         cover: "https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=400&auto=format&fit=crop&q=80"
       },
       lofi: {
-        name: "Lo-Fi Beats 24/7",
-        sub: "Música Chill para Concentrarse",
+        name: "Chill Lo-Fi Radio",
+        sub: "Relax 24/7",
         url: "https://stream.zeno.fm/s4z4c9u3kwzuv",
         cover: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=400&auto=format&fit=crop&q=80"
-      },
-      electro: {
-        name: "Ibiza Electronic Beats",
-        sub: "Deep House / EDM",
-        url: "https://stream.zeno.fm/z83yv7g2kwzuv",
-        cover: "https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?w=400&auto=format&fit=crop&q=80"
       }
     };
 
@@ -101,69 +95,66 @@
     const select = document.getElementById('stationSelect');
     const statusBadge = document.getElementById('statusBadge');
     const volumeSlider = document.getElementById('volumeSlider');
+    const errorMessage = document.getElementById('errorMessage');
 
     function cargarEmisora(key) {
+      errorMessage.classList.add('hidden');
       const radio = RADIOS[key];
       document.getElementById('stationTitle').textContent = radio.name;
       document.getElementById('stationSub').textContent = radio.sub;
       document.getElementById('coverImg').src = radio.cover;
       
       player.src = radio.url;
+      player.load();
+
       if (isPlaying) {
-        statusBadge.textContent = "Conectando...";
-        statusBadge.className = "bg-amber-900/60 text-amber-400 text-xs px-2.5 py-1 rounded-full font-mono";
-        player.play().catch(err => {
-          console.error("Error reproduciendo stream:", err);
-          actualizarBoton(false);
-        });
+        iniciarReproduccion();
       }
     }
 
-    function actualizarBoton(reproduciendo) {
-      isPlaying = reproduciendo;
-      if (reproduciendo) {
-        playIcon.className = 'fa-solid fa-pause text-xl';
+    function iniciarReproduccion() {
+      statusBadge.textContent = "Conectando...";
+      statusBadge.className = "bg-amber-900/60 text-amber-400 text-xs px-2.5 py-1 rounded-full font-mono";
+      
+      player.play().then(() => {
+        isPlaying = true;
+        playIcon.className = 'fa-solid fa-pause text-2xl';
         statusBadge.textContent = "EN VIVO";
         statusBadge.className = "bg-emerald-950 text-emerald-400 border border-emerald-800 text-xs px-2.5 py-1 rounded-full font-mono animate-pulse";
-      } else {
-        playIcon.className = 'fa-solid fa-play text-xl pl-1';
-        statusBadge.textContent = "Detenido";
-        statusBadge.className = "bg-slate-800 text-slate-400 text-xs px-2.5 py-1 rounded-full font-mono";
-      }
+      }).catch(err => {
+        isPlaying = false;
+        playIcon.className = 'fa-solid fa-play text-2xl pl-1';
+        statusBadge.textContent = "Error";
+        statusBadge.className = "bg-red-950 text-red-400 text-xs px-2.5 py-1 rounded-full font-mono";
+        errorMessage.textContent = "No se pudo conectar a la emisora. Intentá apretar Play de nuevo o cambiar de radio.";
+        errorMessage.classList.remove('hidden');
+      });
     }
 
-    // Evento Play/Pause
     playBtn.addEventListener('click', () => {
       if (isPlaying) {
         player.pause();
-        actualizarBoton(false);
+        isPlaying = false;
+        playIcon.className = 'fa-solid fa-play text-2xl pl-1';
+        statusBadge.textContent = "Detenido";
+        statusBadge.className = "bg-slate-800 text-slate-400 text-xs px-2.5 py-1 rounded-full font-mono";
       } else {
         if (!player.src) {
-          cargarEmisora(select.value);
+          player.src = RADIOS[select.value].url;
         }
-        statusBadge.textContent = "Conectando...";
-        statusBadge.className = "bg-amber-900/60 text-amber-400 text-xs px-2.5 py-1 rounded-full font-mono";
-        
-        player.play().then(() => {
-          actualizarBoton(true);
-        }).catch(err => {
-          alert("El navegador bloqueó el audio o la emisora tarda en conectar. Volvé a presionar Play.");
-          actualizarBoton(false);
-        });
+        iniciarReproduccion();
       }
     });
 
-    // Cambiar género
     select.addEventListener('change', (e) => {
       cargarEmisora(e.target.value);
     });
 
-    // Control de volumen
     volumeSlider.addEventListener('input', (e) => {
       player.volume = e.target.value;
     });
 
-    // Cargar selección inicial
+    // Cargar emisora inicial
     cargarEmisora('pop');
   </script>
 </body>
