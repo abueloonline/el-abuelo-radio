@@ -1,25 +1,9 @@
-accent: '#06b6d4',
-                            amber: '#f59e0b',
-                            neon: '#10b981'
-                        }
-                    },
-                    animation: {
-                        'spin-slow': 'spin 12s linear infinite',
-                        'pulse-glow': 'pulseGlow 2s infinite alternate',
-                        'bar-bounce': 'barBounce 1s infinite alternate',
-                    },
-                    keyframes: {
-                        pulseGlow: {
-                            '0%': { boxShadow: '0 0 15px rgba(244, 63, 94, 0.4)' },
-                            '100%': { boxShadow: '0 0 30px rgba(6, 182, 212, 0.8)' }
-                        },
-                        barBounce: {
-                            '0%': { height: '15%' },<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Julito Radio toxica - Music Hub</title>
+    <title>El Abuelo Radio ONLINE - Music Hub</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -35,7 +19,23 @@ accent: '#06b6d4',
                             500: '#f43f5e',
                             600: '#e11d48',
                             900: '#881337',
-    
+                            accent: '#06b6d4',
+                            amber: '#f59e0b',
+                            neon: '#10b981'
+                        }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 12s linear infinite',
+                        'pulse-glow': 'pulseGlow 2s infinite alternate',
+                        'bar-bounce': 'barBounce 1s infinite alternate',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%': { boxShadow: '0 0 15px rgba(244, 63, 94, 0.4)' },
+                            '100%': { boxShadow: '0 0 30px rgba(6, 182, 212, 0.8)' }
+                        },
+                        barBounce: {
+                            '0%': { height: '15%' },
                             '100%': { height: '100%' }
                         }
                     }
@@ -54,7 +54,6 @@ accent: '#06b6d4',
             color: #f3f4f6;
             user-select: none;
         }
-        /* Glassmorphism Card Style */
         .glass-panel {
             background: rgba(17, 24, 39, 0.7);
             backdrop-filter: blur(16px);
@@ -66,7 +65,6 @@ accent: '#06b6d4',
             backdrop-filter: blur(16px);
             border: 1px solid rgba(244, 63, 94, 0.2);
         }
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -81,7 +79,6 @@ accent: '#06b6d4',
         ::-webkit-scrollbar-thumb:hover {
             background: #f43f5e;
         }
-        /* Vinyl Record Animations */
         .vinyl-paused {
             animation-play-state: paused !important;
         }
@@ -139,33 +136,26 @@ accent: '#06b6d4',
 
             <!-- HERO PLAYER CARD -->
             <div class="glass-panel-glow rounded-3xl p-6 sm:p-8 relative overflow-hidden flex flex-col md:flex-row items-center gap-8 shadow-2xl">
-                <!-- Background Decorative Glow -->
                 <div class="absolute -right-16 -top-16 w-64 h-64 bg-brand-600/20 rounded-full blur-3xl pointer-events-none"></div>
                 <div class="absolute -left-16 -bottom-16 w-64 h-64 bg-brand-accent/20 rounded-full blur-3xl pointer-events-none"></div>
 
-                <!-- Animated Vinyl / Artwork Cover -->
                 <div class="relative shrink-0 group">
                     <div id="vinylDisc" class="w-44 h-44 sm:w-52 sm:h-52 rounded-full bg-slate-950 p-2 shadow-2xl relative flex items-center justify-center animate-spin-slow vinyl-paused border-4 border-slate-800/80">
-                        <!-- Vinyl Texture Lines -->
                         <div class="absolute inset-2 rounded-full border border-slate-800 opacity-60"></div>
                         <div class="absolute inset-6 rounded-full border border-slate-800 opacity-40"></div>
                         <div class="absolute inset-10 rounded-full border border-slate-800 opacity-30"></div>
                         
-                        <!-- Center Album Cover -->
                         <img id="heroCoverArt" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80" alt="Cover" class="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover shadow-md z-10">
                         
-                        <!-- Center Spindle Hole -->
                         <div class="w-5 h-5 bg-slate-900 rounded-full z-20 border-2 border-slate-700 flex items-center justify-center">
                             <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
                         </div>
                     </div>
-                    <!-- On-Air Badge -->
                     <span class="absolute top-2 left-2 bg-rose-600 text-white text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full tracking-wider shadow-lg">
-                        <i class="fa-solid fa-circle text-[8px] mr-1 animate-ping"></i> EN VIVO
+                        <i class="fa-solid fa-circle text-[8px] mr-1 animate-ping"></i> ONLINE
                     </span>
                 </div>
 
-                <!-- Track Meta & Visualizer Controls -->
                 <div class="flex-1 text-center md:text-left flex flex-col justify-between w-full">
                     <div>
                         <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
@@ -184,7 +174,7 @@ accent: '#06b6d4',
                         </p>
                     </div>
 
-                    <!-- Audio Frequency Equalizer Bar Canvas -->
+                    <!-- Audio Visualizer Bars -->
                     <div class="my-5 bg-slate-950/60 p-3 rounded-2xl border border-slate-800 flex items-end justify-between h-16 gap-1 px-4">
                         <div class="eq-bar w-full bg-gradient-to-t from-brand-600 to-brand-accent rounded-t transition-all duration-150" style="height: 35%;"></div>
                         <div class="eq-bar w-full bg-gradient-to-t from-brand-600 to-brand-accent rounded-t transition-all duration-150" style="height: 65%;"></div>
@@ -198,7 +188,7 @@ accent: '#06b6d4',
                         <div class="eq-bar w-full bg-gradient-to-t from-brand-600 to-brand-accent rounded-t transition-all duration-150" style="height: 70%;"></div>
                     </div>
 
-                    <!-- Primary Action Buttons -->
+                    <!-- Player Controls -->
                     <div class="flex items-center justify-center md:justify-start gap-4">
                         <button onclick="togglePlay()" id="mainPlayBtn" class="flex items-center gap-2 bg-gradient-to-r from-brand-500 to-rose-600 hover:from-brand-600 hover:to-rose-700 text-white font-bold px-6 py-3 rounded-full shadow-lg shadow-brand-500/30 transition transform active:scale-95">
                             <i id="mainPlayIcon" class="fa-solid fa-play text-lg"></i>
@@ -214,7 +204,7 @@ accent: '#06b6d4',
                 </div>
             </div>
 
-            <!-- GENRES SELECTION (INSTANT SWITCHING) -->
+            <!-- GENRES SELECTION -->
             <div class="glass-panel p-5 rounded-2xl">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-bold text-slate-200 flex items-center gap-2 text-base">
@@ -225,13 +215,10 @@ accent: '#06b6d4',
                     </span>
                 </div>
                 
-                <!-- Category Buttons Grid -->
-                <div id="genresContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <!-- Dynamic genre tabs will be rendered here -->
-                </div>
+                <div id="genresContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
             </div>
 
-            <!-- MUSIC PLAYLIST / SEARCH RESULTS -->
+            <!-- MUSIC PLAYLIST -->
             <div class="glass-panel p-5 rounded-2xl">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-bold text-slate-200 flex items-center gap-2 text-base">
@@ -242,14 +229,12 @@ accent: '#06b6d4',
                     </span>
                 </div>
 
-                <div id="trackListContainer" class="space-y-2 max-h-96 overflow-y-auto pr-1">
-                    <!-- Dynamic Song Items -->
-                </div>
+                <div id="trackListContainer" class="space-y-2 max-h-96 overflow-y-auto pr-1"></div>
             </div>
 
         </section>
 
-        <!-- RIGHT COLUMN: COMMUNITY CHAT & SCHEDULE (4 COLUMNS) -->
+        <!-- RIGHT COLUMN: CHAT & SCHEDULE (4 COLUMNS) -->
         <section class="lg:col-span-4 flex flex-col gap-6">
 
             <!-- LIVE COMMUNITY CHAT -->
@@ -264,14 +249,10 @@ accent: '#06b6d4',
                     </span>
                 </div>
 
-                <!-- Messages Feed -->
-                <div id="chatMessages" class="flex-1 overflow-y-auto space-y-3 text-xs pr-1">
-                    <!-- Dynamic Chat Messages -->
-                </div>
+                <div id="chatMessages" class="flex-1 overflow-y-auto space-y-3 text-xs pr-1"></div>
 
-                <!-- Chat Input Form -->
                 <form onsubmit="sendChatMessage(event)" class="mt-3 pt-3 border-t border-slate-800 flex gap-2">
-                    <input type="text" id="chatInput" placeholder="Escribe un mensaje a la comunidad..." required
+                    <input type="text" id="chatInput" placeholder="Escribe un mensaje..." required
                            class="flex-1 bg-slate-900 text-xs rounded-xl px-3 py-2 text-slate-200 border border-slate-700/80 focus:outline-none focus:border-brand-500">
                     <button type="submit" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-3 py-2 rounded-xl transition text-xs">
                         <i class="fa-solid fa-paper-plane"></i>
@@ -279,7 +260,7 @@ accent: '#06b6d4',
                 </form>
             </div>
 
-            <!-- 24/7 BROADCAST PROGRAM SCHEDULE -->
+            <!-- PROGRAM SCHEDULE -->
             <div class="glass-panel p-5 rounded-2xl">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-bold text-slate-200 flex items-center gap-2 text-sm">
@@ -290,9 +271,7 @@ accent: '#06b6d4',
                     </span>
                 </div>
 
-                <div id="scheduleContainer" class="space-y-3 text-xs">
-                    <!-- Dynamic Schedule Items -->
-                </div>
+                <div id="scheduleContainer" class="space-y-3 text-xs"></div>
             </div>
 
         </section>
@@ -302,7 +281,6 @@ accent: '#06b6d4',
     <div class="fixed bottom-0 left-0 w-full z-50 glass-panel border-t border-slate-800 px-4 py-3">
         <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
             
-            <!-- Current Track Info -->
             <div class="flex items-center gap-3 w-1/4 min-w-[160px]">
                 <img id="footerCover" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=150&q=80" alt="Cover" class="w-11 h-11 rounded-lg object-cover border border-slate-700">
                 <div class="truncate">
@@ -311,7 +289,6 @@ accent: '#06b6d4',
                 </div>
             </div>
 
-            <!-- Controls & Progress Bar -->
             <div class="flex-1 max-w-xl flex flex-col items-center gap-1.5">
                 <div class="flex items-center gap-4">
                     <button onclick="prevTrack()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-backward-step text-sm"></i></button>
@@ -321,17 +298,15 @@ accent: '#06b6d4',
                     <button onclick="nextTrack()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-forward-step text-sm"></i></button>
                 </div>
 
-                <!-- Progress Track Bar -->
                 <div class="w-full flex items-center gap-2">
                     <span id="currentTime" class="text-[10px] font-mono text-slate-400 w-8 text-right">0:00</span>
-                    <div onclick="seekProgress(event)" class="flex-1 h-1.5 bg-slate-800 rounded-full cursor-pointer relative overflow-hidden group">
+                    <div onclick="seekProgress(event)" class="flex-1 h-1.5 bg-slate-800 rounded-full cursor-pointer relative overflow-hidden">
                         <div id="progressBar" class="h-full bg-gradient-to-r from-brand-500 to-brand-accent rounded-full w-0 transition-all duration-300"></div>
                     </div>
                     <span id="totalTime" class="text-[10px] font-mono text-slate-400 w-8">3:30</span>
                 </div>
             </div>
 
-            <!-- Volume & Settings -->
             <div class="flex items-center justify-end gap-3 w-1/4 min-w-[120px]">
                 <button onclick="toggleMute()" class="text-slate-400 hover:text-white"><i id="volumeIcon" class="fa-solid fa-volume-high text-xs"></i></button>
                 <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.8" oninput="changeVolume(this.value)"
@@ -340,47 +315,31 @@ accent: '#06b6d4',
         </div>
     </div>
 
-    <!-- TOAST NOTIFICATION CONTAINER -->
+    <!-- TOAST CONTAINER -->
     <div id="toastContainer" class="fixed top-20 right-4 z-50 flex flex-col gap-2"></div>
 
-    <!-- JAVASCRIPT LOGIC ENGINE -->
+    <!-- JAVASCRIPT ENGINE -->
     <script>
-        // MASTER TRACK DATABASE (All Genres)
         const masterTrackDatabase = [
-            // TROPICAL
             { id: 1, title: "Cumbia de la Vida ONLINE", artist: "El Abuelo & Los Reyes", genre: "Tropical", cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80", duration: 210, freq: 523.25 },
             { id: 2, title: "Salsa de Noche", artist: "Combo Sabroson", genre: "Tropical", cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&q=80", duration: 195, freq: 587.33 },
             { id: 3, title: "Bachata Sensual Neon", artist: "Romeo & Julieta", genre: "Tropical", cover: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&q=80", duration: 220, freq: 659.25 },
             { id: 4, title: "Merengue Fuego ONLINE", artist: "El Abuelo Band", genre: "Tropical", cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=80", duration: 180, freq: 698.46 },
-
-            // POP & URBANO
             { id: 5, title: "Baila Conmigo", artist: "Lucía & El Ritmo", genre: "Pop & Urbano", cover: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=400&q=80", duration: 190, freq: 440.00 },
             { id: 6, title: "Luces de la Ciudad", artist: "El Abuelo Pop Project", genre: "Pop & Urbano", cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&q=80", duration: 205, freq: 493.88 },
             { id: 7, title: "Estrella Fugaz", artist: "Sofia Star", genre: "Pop & Urbano", cover: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=400&q=80", duration: 215, freq: 392.00 },
-
-            // ROCK & CLÁSICOS
             { id: 8, title: "Guitarra Eléctrica Nocturna", artist: "Los Vientos del Rock", genre: "Rock & Clásicos", cover: "https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=400&q=80", duration: 240, freq: 329.63 },
             { id: 9, title: "Leyendas del 80", artist: "El Abuelo Rock Experience", genre: "Rock & Clásicos", cover: "https://images.unsplash.com/photo-1511735111819-9a3f7709049c?w=400&q=80", duration: 260, freq: 293.66 },
-
-            // ELECTRÓNICA
             { id: 10, title: "Cyber Pulse 2099", artist: "DJ Neon Abuelo", genre: "Electrónica", cover: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=400&q=80", duration: 230, freq: 523.25 },
             { id: 11, title: "Bassline Galaxy", artist: "Electro Wave", genre: "Electrónica", cover: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&q=80", duration: 210, freq: 587.33 },
-
-            // LOFI & CHILL
             { id: 12, title: "Lluvia en la Ventana", artist: "Lofi El Abuelo", genre: "Lofi & Chill", cover: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=400&q=80", duration: 175, freq: 261.63 },
             { id: 13, title: "Café de Media Noche", artist: "Chill Beats Studio", genre: "Lofi & Chill", cover: "https://images.unsplash.com/photo-1445985543468-b42169244731?w=400&q=80", duration: 195, freq: 349.23 },
-
-            // REGGENTON / TRAP
             { id: 14, title: "Perreo Fuego", artist: "MC El Abuelo", genre: "Reggaeton / Trap", cover: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=400&q=80", duration: 185, freq: 440.00 },
-
-            // JAZZ & BLUES
             { id: 15, title: "Saxofón Nocturno", artist: "El Abuelo Jazz Quartet", genre: "Jazz & Blues", cover: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=400&q=80", duration: 250, freq: 392.00 }
         ];
 
-        // GENRES LIST
         const genresList = ["Todos", "Tropical", "Pop & Urbano", "Rock & Clásicos", "Electrónica", "Lofi & Chill", "Reggaeton / Trap", "Jazz & Blues"];
 
-        // DYNAMIC SCHEDULE DATABASE BY GENRE
         const scheduleDatabase = {
             "Todos": [
                 { title: "Mañanas Tropicales & Cumbia", time: "06:00 AM - 12:00 PM", status: "Activo" },
@@ -413,16 +372,16 @@ accent: '#06b6d4',
                 { title: "Techno & Synthwave ONLINE Rave", time: "11:00 PM - 08:00 AM", status: "Próximo" }
             ],
             "Lofi & Chill": [
-                { title: "Lofi Beats para Estudiar y Concentrarse", time: "06:00 AM - 01:00 PM", status: "Activo" },
+                { title: "Lofi Beats para Estudiar", time: "06:00 AM - 01:00 PM", status: "Activo" },
                 { title: "Chillhop & Tarde Relajante", time: "01:00 PM - 07:00 PM", status: "Próximo" },
                 { title: "Ambient & Melodías Suaves", time: "07:00 PM - 00:00 AM", status: "Próximo" },
                 { title: "Midnight Sleep Lofi ONLINE", time: "00:00 AM - 06:00 AM", status: "Próximo" }
             ],
             "Reggaeton / Trap": [
                 { title: "El Mañanero Urbano & Dembow", time: "08:00 AM - 01:00 PM", status: "Activo" },
-                { title: "Perreo Clásico & Éxitos Old School", time: "01:00 PM - 06:00 PM", status: "Próximo" },
+                { title: "Perreo Clásico Old School", time: "01:00 PM - 06:00 PM", status: "Próximo" },
                 { title: "Trap Latino & Tendencias", time: "06:00 PM - 11:00 PM", status: "Próximo" },
-                { title: "Noche de Boliche & Reggaeton ONLINE", time: "11:00 PM - 08:00 AM", status: "Próximo" }
+                { title: "Noche de Boliche ONLINE", time: "11:00 PM - 08:00 AM", status: "Próximo" }
             ],
             "Jazz & Blues": [
                 { title: "Café, Saxofón & Jazz Matutino", time: "07:00 AM - 12:00 PM", status: "Activo" },
@@ -432,19 +391,17 @@ accent: '#06b6d4',
             ]
         };
 
-        // STATE VARIABLES
         let activeGenre = "Todos";
         let activePlaylist = [...masterTrackDatabase];
         let currentTrackIndex = 0;
         let isPlaying = false;
-        let isRadioMode = true; // Radio ONLINE vs On-Demand
+        let isRadioMode = true;
         let favoriteTrackIds = [];
         let currentTimeSeconds = 0;
         let trackTimerInterval = null;
         let audioCtx = null;
         let currentOscillator = null;
 
-        // INITIALIZATION ON LOAD
         window.onload = function () {
             renderGenreTabs();
             renderSchedule();
@@ -454,7 +411,6 @@ accent: '#06b6d4',
             setInterval(updateEqualizerVisualizer, 150);
         };
 
-        // RENDER GENRE TABS
         function renderGenreTabs() {
             const container = document.getElementById('genresContainer');
             container.innerHTML = genresList.map(genre => {
@@ -473,7 +429,6 @@ accent: '#06b6d4',
             }).join('');
         }
 
-        // RENDER DYNAMIC SCHEDULE BY GENRE
         function renderSchedule() {
             const container = document.getElementById('scheduleContainer');
             const label = document.getElementById('scheduleGenreLabel');
@@ -493,7 +448,6 @@ accent: '#06b6d4',
             `).join('');
         }
 
-        // FILTER GENRE AND AUTOMATICALLY PLAY FIRST TRACK
         function filterByGenre(genre) {
             activeGenre = genre;
             renderGenreTabs();
@@ -506,9 +460,8 @@ accent: '#06b6d4',
             }
             
             renderTrackList();
-            showToast("Género Seleccionado", `Cargando programación y temas de: ${genre}`);
+            showToast("Género Seleccionado", `Cargando programación: ${genre}`);
 
-            // INSTANT AUTOMATIC PLAYBACK ON GENRE SELECT
             if (activePlaylist.length > 0) {
                 loadTrack(0);
                 isPlaying = true;
@@ -516,7 +469,6 @@ accent: '#06b6d4',
             }
         }
 
-        // RENDER SONG LIST
         function renderTrackList() {
             const container = document.getElementById('trackListContainer');
             document.getElementById('trackCountLabel').innerText = `Mostrando ${activePlaylist.length} temas`;
@@ -560,18 +512,16 @@ accent: '#06b6d4',
             }).join('');
         }
 
-        // PLAY SPECIFIC TRACK BY ID
         function playTrackById(id) {
             const index = activePlaylist.findIndex(t => t.id === id);
             if(index !== -1) {
                 loadTrack(index);
                 isPlaying = true;
                 updatePlayPauseState();
-                showToast("Reproduciendo", `${activePlaylist[index].title} - ${activePlaylist[index].artist}`);
+                showToast("Reproduciendo", `${activePlaylist[index].title}`);
             }
         }
 
-        // LOAD TRACK DATA INTO UI
         function loadTrack(index) {
             currentTrackIndex = index;
             const track = activePlaylist[currentTrackIndex];
@@ -597,7 +547,6 @@ accent: '#06b6d4',
             }
         }
 
-        // PLAY / PAUSE TOGGLE
         function togglePlay() {
             isPlaying = !isPlaying;
             updatePlayPauseState();
@@ -630,7 +579,6 @@ accent: '#06b6d4',
             }
         }
 
-        // TIMER & AUTOMATIC SONG PROGRESSION
         function startTimer() {
             stopTimer();
             trackTimerInterval = setInterval(() => {
@@ -641,7 +589,7 @@ accent: '#06b6d4',
                 updateProgressBar();
 
                 if (currentTimeSeconds >= track.duration) {
-                    nextTrack(); // Auto next track when finished
+                    nextTrack();
                 }
             }, 1000);
         }
@@ -668,7 +616,6 @@ accent: '#06b6d4',
             updateProgressBar();
         }
 
-        // TRACK NAVIGATION
         function nextTrack() {
             if (activePlaylist.length === 0) return;
             let nextIndex = currentTrackIndex + 1;
@@ -687,7 +634,6 @@ accent: '#06b6d4',
             updatePlayPauseState();
         }
 
-        // SEARCH ENGINE
         function handleSearch(query) {
             const q = query.toLowerCase().trim();
             if(!q) {
@@ -704,7 +650,6 @@ accent: '#06b6d4',
             renderTrackList();
         }
 
-        // FAVORITES SYSTEM
         function toggleFavorite(id) {
             if (favoriteTrackIds.includes(id)) {
                 favoriteTrackIds = favoriteTrackIds.filter(fId => fId !== id);
@@ -732,7 +677,6 @@ accent: '#06b6d4',
             }
         }
 
-        // RADIO VS ON-DEMAND MODE
         function toggleRadioMode() {
             isRadioMode = !isRadioMode;
             const text = document.getElementById('modeText');
@@ -745,11 +689,10 @@ accent: '#06b6d4',
             } else {
                 text.innerText = "Modo DJ Personalizado";
                 btn.className = "flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-brand-accent/20 text-brand-accent border border-brand-accent/40 hover:bg-brand-accent/30 transition";
-                showToast("Modo DJ", "Ahora tienes control total a pedido.");
+                showToast("Modo DJ", "Tienes control total a pedido.");
             }
         }
 
-        // EQUALIZER ANIMATION VISUALIZER
         function updateEqualizerVisualizer() {
             const bars = document.querySelectorAll('.eq-bar');
             bars.forEach(bar => {
@@ -762,7 +705,6 @@ accent: '#06b6d4',
             });
         }
 
-        // VOLUME CONTROLS
         function changeVolume(val) {
             const icon = document.getElementById('volumeIcon');
             if(val == 0) {
@@ -778,7 +720,6 @@ accent: '#06b6d4',
             }
         }
 
-        // WEB AUDIO SYNTHESIZER ENGINE
         function playAudioSynth(frequency = 440) {
             try {
                 if (!audioCtx) {
@@ -830,12 +771,11 @@ accent: '#06b6d4',
             changeVolume(slider.value);
         }
 
-        // SIMULATED LIVE COMMUNITY CHAT
         const simulatedUsers = ["Carlos_Salsa", "Martina_Electro", "AbueloFan99", "Lucía_Rock", "Dj_Beto", "Sofia_Lofi"];
         const simulatedMessages = [
-            "¡Qué buena selección suena a esta hora en El Abuelo Radio! 🎶",
-            "¡Saludos a toda la comunidad desde Argentina! 👋",
-            "Suban el volumen que este tema es un temazo 💥",
+            "¡Qué buena selección suena en El Abuelo Radio! 🎶",
+            "¡Saludos a todos desde Argentina! 👋",
+            "Suban el volumen que este tema es genial 💥",
             "La programación ONLINE de El Abuelo Radio nunca falla. 🔥",
             "¡Excelente sonido y sin interrupciones! 🚀"
         ];
@@ -844,12 +784,11 @@ accent: '#06b6d4',
             const container = document.getElementById('chatMessages');
             container.innerHTML = `
                 <div class="bg-slate-900/60 p-2.5 rounded-xl border border-slate-800">
-                    <span class="font-bold text-brand-400">DJ El Abuelo Bot:</span>
-                    <span class="text-slate-300">¡Bienvenidos a El Abuelo Radio ONLINE! Selecciona tu género o programa favorito.</span>
+                    <span class="font-bold text-brand-400">El Abuelo Bot:</span>
+                    <span class="text-slate-300">¡Bienvenidos a El Abuelo Radio ONLINE! Selecciona tu género o programa preferido.</span>
                 </div>
             `;
 
-            // Interval to auto-generate simulated user chats
             setInterval(() => {
                 const user = simulatedUsers[Math.floor(Math.random() * simulatedUsers.length)];
                 const msg = simulatedMessages[Math.floor(Math.random() * simulatedMessages.length)];
@@ -860,7 +799,7 @@ accent: '#06b6d4',
         function addChatMessage(user, message) {
             const container = document.getElementById('chatMessages');
             const msgEl = document.createElement('div');
-            msgEl.className = "bg-slate-900/60 p-2.5 rounded-xl border border-slate-800 animate-fade-in";
+            msgEl.className = "bg-slate-900/60 p-2.5 rounded-xl border border-slate-800";
             msgEl.innerHTML = `
                 <span class="font-bold text-brand-400">${user}:</span>
                 <span class="text-slate-300">${escapeHtml(message)}</span>
@@ -885,7 +824,6 @@ accent: '#06b6d4',
             });
         }
 
-        // TOAST NOTIFICATIONS SYSTEM
         function showToast(title, message) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
@@ -911,7 +849,6 @@ accent: '#06b6d4',
             }, 3500);
         }
 
-        // TIME FORMATTER UTIL
         function formatTime(seconds) {
             const mins = Math.floor(seconds / 60);
             const secs = Math.floor(seconds % 60);
