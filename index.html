@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal de Noticias Automatizado & Radio en Vivo</title>
-  <!-- Tailwind CSS CDN -->
+  <title>Radio FM En Vivo - Streaming & Chat</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -12,372 +11,57 @@
       theme: {
         extend: {
           colors: {
-            brand: { 50: '#eff6ff', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' }
+            brand: { 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9' }
           }
         }
       }
     }
   </script>
-  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col font-sans transition-colors duration-200">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased">
 
   <!-- HEADER -->
-  <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-800/90 backdrop-blur border-b border-slate-200 dark:border-slate-700 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <!-- Logo -->
-        <div class="flex items-center space-x-3">
-          <div class="bg-gradient-to-tr from-blue-600 to-indigo-600 text-white p-2.5 rounded-xl shadow-md">
-            <i class="fa-solid fa-[#fa-newspaper] fa-newspaper text-xl"></i>
-          </div>
-          <div>
-            <h1 class="font-bold text-xl tracking-tight leading-none bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">AI NewsPulse</h1>
-            <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Portal Automatizado en Tiempo Real</span>
-          </div>
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="bg-gradient-to-tr from-violet-600 to-fuchsia-600 p-2.5 rounded-xl shadow-lg shadow-violet-500/30">
+          <i class="fa-solid fa-radio text-xl text-white"></i>
         </div>
-
-        <!-- Acciones Cabecera -->
-        <div class="flex items-center space-x-4">
-          <!-- Live User Count -->
-          <div class="hidden sm:flex items-center space-x-2 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 px-3 py-1.5 rounded-full text-xs text-emerald-700 dark:text-emerald-400 font-medium">
-            <span class="relative flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            <span id="userCountBadge">142</span> en línea
-          </div>
-
-          <!-- Modos Visuales -->
-          <button id="themeToggleBtn" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition">
-            <i id="themeIcon" class="fa-solid fa-sun"></i>
-          </button>
+        <div>
+          <h1 class="font-bold text-lg tracking-tight bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">PULSE MUSIC FM</h1>
+          <p class="text-[10px] text-slate-400 font-medium">ESTACIÓN DE RADIO EN VIVO</p>
         </div>
+      </div>
+
+      <!-- OYENTES CONECTADOS EN VIVO -->
+      <div class="flex items-center space-x-2 bg-emerald-950/60 border border-emerald-800/80 px-3.5 py-1.5 rounded-full text-xs text-emerald-400 font-semibold shadow-inner">
+        <span class="relative flex h-2.5 w-2.5">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+        </span>
+        <span id="userCountHeader">342</span>
+        <span class="text-emerald-500 font-normal">oyentes en línea</span>
       </div>
     </div>
   </header>
 
-  <!-- PANEL REPRODUCTOR DE RADIO POR GÉNERO -->
-  <section class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white border-b border-indigo-900/50 py-4 shadow-inner">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="max-w-6xl mx-auto px-4 py-8 flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
+
+    <!-- REPRODUCTOR PRINCIPAL DE RADIO (2 Col) -->
+    <section class="lg:col-span-2 flex flex-col space-y-6">
       
-      <!-- Info de Estación -->
-      <div class="flex items-center space-x-4 w-full md:w-auto">
-        <img id="radioCover" src="https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=150&auto=format&fit=crop&q=80" class="w-12 h-12 rounded-lg object-cover shadow-md border border-slate-700" alt="Cover">
-        <div>
-          <div class="flex items-center space-x-2">
-            <span class="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-            <span class="text-xs uppercase tracking-wider text-indigo-300 font-semibold">Radio & Streaming</span>
+      <!-- CARD REPRODUCTOR -->
+      <div class="bg-gradient-to-b from-slate-900 to-slate-900/90 rounded-2xl p-6 sm:p-8 border border-slate-800 shadow-2xl relative overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-72 h-72 bg-violet-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- SELECTOR DE GÉNERO -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-slate-800">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Seleccionar Género Musical</label>
+            <p class="text-xs text-slate-500">Cambia de emisora en tiempo real</p>
           </div>
-          <h3 id="trackTitle" class="font-bold text-base leading-tight">Radio Noticias 24/7</h3>
-          <p id="trackArtist" class="text-xs text-slate-400">Emisión Continua</p>
-        </div>
-      </div>
-
-      <!-- Selector de Género Musical -->
-      <div class="flex items-center space-x-3 w-full md:w-auto justify-between md:justify-end">
-        <div class="flex items-center space-x-2">
-          <i class="fa-solid fa-sliders text-indigo-400 text-sm"></i>
-          <label for="genreSelect" class="text-xs text-slate-300 font-medium">Género / Emisora:</label>
-        </div>
-        <select id="genreSelect" class="bg-slate-800 text-slate-200 border border-slate-700 text-xs rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
-          <option value="Noticias en Vivo">Radio Noticias 24/7</option>
-          <option value="Rock & Pop">Rock & Pop Hits</option>
-          <option value="Electrónica">Electrónica / EDM</option>
-          <option value="Lo-Fi / Relax">Lo-Fi & Chill Beats</option>
-        </select>
-
-        <!-- Botón Play/Pause -->
-        <button id="playAudioBtn" class="bg-indigo-600 hover:bg-indigo-500 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition transform active:scale-95">
-          <i id="playIcon" class="fa-solid fa-play text-sm"></i>
-        </button>
-      </div>
-
-    </div>
-    <!-- Elemento Audio Oculto -->
-    <audio id="audioPlayer" src="https://stream.zeno.fm/f3v62y1pzp8uv" preload="none"></audio>
-  </section>
-
-  <!-- PANEL MOTOR DE AUTOMATIZACIÓN (CRON SIMULATOR) -->
-  <div class="bg-slate-800 text-slate-200 text-xs py-2 px-4 border-b border-slate-700">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-      <div class="flex items-center space-x-2">
-        <span class="bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded font-mono font-bold">BOT CRON</span>
-        <span id="botStatus">Actualizando feeds RSS automáticamente...</span>
-      </div>
-      <div class="flex items-center space-x-4">
-        <span>Próximo rastreo en: <strong id="timerCountdown" class="text-blue-400 font-mono">10s</strong></span>
-        <button id="triggerFetchBtn" class="bg-slate-700 hover:bg-slate-600 px-2 py-1 rounded text-slate-300 transition">
-          <i class="fa-solid fa-rotate text-xs mr-1"></i> Forzar Rastreo
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- CONTENIDO PRINCIPAL (FEED Y CHAT EN VIVO) -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow grid grid-cols-1 lg:grid-cols-4 gap-6">
-
-    <!-- COLUMNA PRINCIPAL: FEED DE NOTICIAS (3 Cols) -->
-    <section class="lg:col-span-3 space-y-6">
-
-      <!-- Filtros y Búsqueda -->
-      <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4">
-        
-        <!-- Categorías -->
-        <div class="flex items-center space-x-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0">
-          <button class="cat-btn bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap" data-cat="all">Todas</button>
-          <button class="cat-btn bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap" data-cat="Tecnología">Tecnología</button>
-          <button class="cat-btn bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap" data-cat="Ciencia">Ciencia</button>
-          <button class="cat-btn bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap" data-cat="Economía">Economía</button>
-        </div>
-
-        <!-- Buscador -->
-        <div class="relative w-full sm:w-64">
-          <input type="text" id="searchInput" placeholder="Buscar noticias..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg pl-8 pr-4 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 dark:text-slate-100">
-          <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
-        </div>
-      </div>
-
-      <!-- Grid de Noticias -->
-      <div id="newsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Generado dinámicamente con JavaScript -->
-      </div>
-    </section>
-
-    <!-- COLUMNA LATERAL: CHAT EN VIVO DE LECTORES (1 Col) -->
-    <aside class="space-y-6">
-      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col h-[520px]">
-        
-        <!-- Header del Chat -->
-        <div class="p-3 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
-          <div class="flex items-center space-x-2">
-            <i class="fa-solid fa-comments text-blue-500"></i>
-            <h3 class="font-bold text-sm">Comunidad en Vivo</h3>
-          </div>
-          <span id="chatOnlineCount" class="text-xs text-emerald-500 font-medium">142 en línea</span>
-        </div>
-
-        <!-- Mensajes del Chat -->
-        <div id="chatMessages" class="p-3 flex-grow overflow-y-auto space-y-3 text-xs">
-          <div class="bg-slate-50 dark:bg-slate-900 p-2 rounded-lg border border-slate-100 dark:border-slate-800">
-            <span class="font-bold text-blue-500">Carlos_Dev:</span>
-            <p class="text-slate-600 dark:text-slate-300">¡Impresionante la rapidez con la que se actualizan los feeds!</p>
-          </div>
-          <div class="bg-slate-50 dark:bg-slate-900 p-2 rounded-lg border border-slate-100 dark:border-slate-800">
-            <span class="font-bold text-indigo-500">Ana_Tech:</span>
-            <p class="text-slate-600 dark:text-slate-300">El resumen de la noticia de IA con Gemini estuvo genial.</p>
-          </div>
-        </div>
-
-        <!-- Input para enviar mensaje -->
-        <form id="chatForm" class="p-2 border-t border-slate-200 dark:border-slate-700 flex gap-2">
-          <input type="text" id="chatInput" placeholder="Escribe un comentario..." class="flex-grow bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-blue-500">
-          <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition">
-            <i class="fa-solid fa-paper-plane"></i>
-          </button>
-        </form>
-
-      </div>
-    </aside>
-
-  </main>
-
-  <!-- JAVASCRIPT LOGIC -->
-  <script>
-    // --- BASE DE DATOS Y ESTACIONES DE RADIO ---
-    const STATIONS = {
-      'Noticias en Vivo': {
-        name: 'Radio Noticias 24/7',
-        artist: 'Emisión Continua',
-        cover: 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=150&auto=format&fit=crop&q=80',
-        stream: 'https://stream.zeno.fm/f3v62y1pzp8uv'
-      },
-      'Rock & Pop': {
-        name: 'Classic Rock Hits',
-        artist: 'Varios Artistas',
-        cover: 'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=150&auto=format&fit=crop&q=80',
-        stream: 'https://stream.zeno.fm/0r0xa792kwzuv'
-      },
-      'Electrónica': {
-        name: 'Deep House Beats',
-        artist: 'DJ Mix Session',
-        cover: 'https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?w=150&auto=format&fit=crop&q=80',
-        stream: 'https://stream.zeno.fm/z83yv7g2kwzuv'
-      },
-      'Lo-Fi / Relax': {
-        name: 'Chill & Study Beats',
-        artist: 'Lo-Fi Generator',
-        cover: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=150&auto=format&fit=crop&q=80',
-        stream: 'https://stream.zeno.fm/s4z4c9u3kwzuv'
-      }
-    };
-
-    let newsData = [
-      {
-        id: 1,
-        title: "Modelos de Inteligencia Artificial avanzan en razonamiento autonómo",
-        category: "Tecnología",
-        time: "Hace 5 minutos",
-        summary: "Nuevos avances permiten a las IA resolver problemas complejos de lógica paso a paso sin intervención humana.",
-        image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80"
-      },
-      {
-        id: 2,
-        title: "Telescopio James Webb detecta señales de agua en exoplaneta lejano",
-        category: "Ciencia",
-        time: "Hace 18 minutos",
-        summary: "Los últimos datos espectroscópicos revelan abundancia de vapor de agua en la atmósfera de una supertierra.",
-        image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&auto=format&fit=crop&q=80"
-      },
-      {
-        id: 3,
-        title: "Mercados globales responden con volatilidad a las nuevas tasas de interés",
-        category: "Economía",
-        time: "Hace 32 minutos",
-        summary: "Los principales índices bursátiles registran variaciones mientras los bancos centrales ajustan sus proyecciones.",
-        image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&auto=format&fit=crop&q=80"
-      }
-    ];
-
-    let userCount = 142;
-    let isPlaying = false;
-    let currentCategory = 'all';
-
-    // --- REPRODUCTOR DE AUDIO & SELECCIÓN DE GÉNERO ---
-    const audioPlayer = document.getElementById('audioPlayer');
-    const playBtn = document.getElementById('playAudioBtn');
-    const playIcon = document.getElementById('playIcon');
-    const genreSelect = document.getElementById('genreSelect');
-
-    genreSelect.addEventListener('change', (e) => {
-      const selectedGenre = e.target.value;
-      const station = STATIONS[selectedGenre] || STATIONS['Noticias en Vivo'];
-
-      document.getElementById('trackTitle').textContent = station.name;
-      document.getElementById('trackArtist').textContent = station.artist;
-      document.getElementById('radioCover').src = station.cover;
-
-      audioPlayer.src = station.stream;
-      if (isPlaying) {
-        audioPlayer.play().catch(err => console.log('Error de reproducción:', err));
-      }
-    });
-
-    playBtn.addEventListener('click', () => {
-      if (isPlaying) {
-        audioPlayer.pause();
-        playIcon.classList.replace('fa-pause', 'fa-play');
-      } else {
-        audioPlayer.play().then(() => {
-          playIcon.classList.replace('fa-play', 'fa-pause');
-        }).catch(err => console.log('Presiona de nuevo para reproducir'));
-      }
-      isPlaying = !isPlaying;
-    });
-
-    // --- RENDERIZAR NOTICIAS ---
-    function renderNews() {
-      const grid = document.getElementById('newsGrid');
-      const searchVal = document.getElementById('searchInput').value.toLowerCase();
-      
-      const filtered = newsData.filter(item => {
-        const matchesCat = currentCategory === 'all' || item.category === currentCategory;
-        const matchesSearch = item.title.toLowerCase().includes(searchVal) || item.summary.toLowerCase().includes(searchVal);
-        return matchesCat && matchesSearch;
-      });
-
-      grid.innerHTML = filtered.map(item => `
-        <article class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col hover:shadow-md transition">
-          <img src="${item.image}" class="h-44 w-full object-cover" alt="Noticia">
-          <div class="p-4 flex-grow flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2">
-                <span class="bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 font-semibold px-2 py-0.5 rounded">${item.category}</span>
-                <span>${item.time}</span>
-              </div>
-              <h2 class="font-bold text-sm text-slate-800 dark:text-slate-100 mb-2 line-clamp-2">${item.title}</h2>
-              <p class="text-xs text-slate-600 dark:text-slate-300 line-clamp-3">${item.summary}</p>
-            </div>
-            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
-              <span class="text-xs text-blue-500 hover:underline cursor-pointer font-medium">Leer completo &rarr;</span>
-              <button onclick="summarizeIA(${item.id})" class="text-xs bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 px-2.5 py-1 rounded-md border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 transition">
-                <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Resumir IA
-              </button>
-            </div>
-          </div>
-        </article>
-      `).join('');
-    }
-
-    // --- CONTADOR DE USUARIOS REAL EN CHAT ---
-    function startUserCounter() {
-      setInterval(() => {
-        const delta = Math.floor(Math.random() * 7) - 3;
-        userCount = Math.max(90, userCount + delta);
-        document.getElementById('userCountBadge').textContent = userCount;
-        document.getElementById('chatOnlineCount').textContent = `${userCount} en línea`;
-      }, 4000);
-    }
-
-    // --- MOTOR SIMULADO DE BOT CRON ---
-    let countdown = 10;
-    setInterval(() => {
-      countdown--;
-      if (countdown <= 0) {
-        countdown = 10;
-        document.getElementById('botStatus').textContent = "Feeds actualizados correctamente.";
-        setTimeout(() => {
-          document.getElementById('botStatus').textContent = "Esperando el próximo ciclo...";
-        }, 2000);
-      }
-      document.getElementById('timerCountdown').textContent = `${countdown}s`;
-    }, 1000);
-
-    // --- CHAT EN VIVO ---
-    document.getElementById('chatForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const input = document.getElementById('chatInput');
-      if (!input.value.trim()) return;
-
-      const chatContainer = document.getElementById('chatMessages');
-      const msg = document.createElement('div');
-      msg.className = "bg-blue-50 dark:bg-blue-950/50 p-2 rounded-lg border border-blue-100 dark:border-blue-900";
-      msg.innerHTML = `<span class="font-bold text-blue-600 dark:text-blue-400">Tú:</span> <p class="text-slate-700 dark:text-slate-200">${input.value}</p>`;
-      chatContainer.appendChild(msg);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-      input.value = '';
-    });
-
-    // --- CAMBIO DE TEMA CLARO/OSCURO ---
-    document.getElementById('themeToggleBtn').addEventListener('click', () => {
-      document.documentElement.classList.toggle('dark');
-      const icon = document.getElementById('themeIcon');
-      icon.classList.toggle('fa-sun');
-      icon.classList.toggle('fa-moon');
-    });
-
-    // --- EVENTOS FILTROS & BÚSQUEDA ---
-    document.querySelectorAll('.cat-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        document.querySelectorAll('.cat-btn').forEach(b => {
-          b.className = "cat-btn bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap";
-        });
-        e.target.className = "cat-btn bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap";
-        currentCategory = e.target.getAttribute('data-cat');
-        renderNews();
-      });
-    });
-
-    document.getElementById('searchInput').addEventListener('input', renderNews);
-
-    function summarizeIA(id) {
-      alert(`Generando resumen inteligente con IA para la noticia #${id}...`);
-    }
-
-    // Inicialización
-    renderNews();
-    startUserCounter();
-  </script>
-</body>
-</html>
+          <select id="genreSelect" class="w-full sm:w-64 bg-slate-800 text-slate-200 border border-slate-700 text-sm font-medium rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-violet-500 cursor-pointer shadow-sm">
+            <option value="Rock & Pop">🎸 Rock & Pop Classic</option>
+            <option value="Electrónica">🎧 Electrónica / EDM</option
