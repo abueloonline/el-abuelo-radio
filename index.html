@@ -242,12 +242,12 @@
 
     <!-- AUDIO ENGINE & CHAT SCRIPT -->
     <script>
-        // Cada género es una estación de radio independiente con transmisiones directas garantizadas
+        // Transmisiones directas de audio HTTPS estables para cada género musical
         const masterTrackDatabase = [
             { 
                 id: 1, 
                 title: "Radio Cumbia & Tropical", 
-                artist: "FM Cumbia Latina 24/7", 
+                artist: "Fiesta Cumbiera En Vivo", 
                 genre: "Cumbia & Tropical", 
                 cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80", 
                 streamUrl: "https://stream.zeno.fm/f3wvbbqmdg8uv" 
@@ -255,7 +255,7 @@
             { 
                 id: 2, 
                 title: "Salsa & Son Latino", 
-                artist: "Salsa Caribe Online", 
+                artist: "Caribe Mix Online", 
                 genre: "Salsa & Son", 
                 cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&q=80", 
                 streamUrl: "https://stream.zeno.fm/0r26w140308uv" 
@@ -266,7 +266,7 @@
                 artist: "Rock Clásico FM", 
                 genre: "Rock & Clásicos", 
                 cover: "https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=400&q=80", 
-                streamUrl: "https://stream.zeno.fm/uq6y23844d0uv" 
+                streamUrl: "https://icecast.radiofrance.fr/fip-midfi.mp3" 
             },
             { 
                 id: 4, 
@@ -286,32 +286,32 @@
             }
         ];
 
-        // Programación interactiva de cada emisora
+        // Guía de programación detallada e interactiva única para cada género
         const genreSchedules = {
             "Cumbia & Tropical": [
-                { time: "08:00 - 13:00", name: "El Mañanero Cumbiero", host: "Conduce: El Abuelo", live: true },
-                { time: "13:00 - 18:00", name: "Fiestón Santafesino", host: "Conduce: DJ Cumbia", live: false },
-                { time: "18:00 - 00:00", name: "Noche Cumbiera & Cuarteto", host: "Conduce: El Abuelo", live: false }
+                { time: "08:00 - 13:00", name: "El Mañanero Tropical", host: "Conduce: El Abuelo", live: true },
+                { time: "13:00 - 18:00", name: "Fiestón Santafesino & Cuarteto", host: "Conduce: DJ Cumbia", live: false },
+                { time: "18:00 - 00:00", name: "Noche Cumbiera a Todo Ritmo", host: "Conduce: El Abuelo", live: false }
             ],
             "Salsa & Son": [
-                { time: "09:00 - 14:00", name: "Salsa Caliente del Medio Día", host: "Conduce: El Abuelo", live: true },
-                { time: "14:00 - 19:00", name: "Caribe, Bachata & Son", host: "Conduce: DJ Ritmo", live: false },
+                { time: "09:00 - 14:00", name: "Salsa Caliente del Mediodía", host: "Conduce: El Abuelo", live: true },
+                { time: "14:00 - 19:00", name: "Caribe, Bachata & Guaguancó", host: "Conduce: DJ Ritmo", live: false },
                 { time: "19:00 - 01:00", name: "Descarga Salsera Nocturna", host: "Conduce: Clan Salsa", live: false }
+            ],
+            "Rock & Clásicos": [
+                { time: "10:00 - 15:00", name: "Leyendas del Rock Nacional", host: "Conduce: Rodolfo Rock", live: true },
+                { time: "15:00 - 20:00", name: "Clásicos Internacionales 80s & 90s", host: "Conduce: El Abuelo", live: false },
+                { time: "20:00 - 02:00", name: "Noche de Guitarras & Clásicos", host: "Conduce: Alex Metal", live: false }
             ],
             "Pop & Urbano": [
                 { time: "09:00 - 14:00", name: "Top 40 Ranking Pop", host: "Conduce: Sofía Hits", live: true },
                 { time: "14:00 - 19:00", name: "Reggaeton & Urban Flow", host: "Conduce: DJ Urbano", live: false },
                 { time: "19:00 - 01:00", name: "La Previa Pop del Finde", host: "Conduce: Clan Pop", live: false }
             ],
-            "Rock & Clásicos": [
-                { time: "10:00 - 15:00", name: "Leyendas del Rock Nacional", host: "Conduce: Rodolfo Rock", live: true },
-                { time: "15:00 - 20:00", name: "Clásicos Internacionales 80s & 90s", host: "Conduce: El Abuelo", live: false },
-                { time: "20:00 - 02:00", name: "Noche de Guitarras & Metal", host: "Conduce: Alex Metal", live: false }
-            ],
             "Lofi & Chill": [
                 { time: "00:00 - 12:00", name: "Lofi Beats para Estudiar & Trabajar", host: "Música 24/7 Sin Interrupciones", live: true },
                 { time: "12:00 - 18:00", name: "Chillhop & Relax Sessions", host: "Sesión Chillout", live: false },
-                { time: "18:00 - 00:00", name: "Midnight Ambient & Soul", host: "Selección Nocturna", live: false }
+                { time: "18:00 - 00:00", name: "Midnight Ambient & Smooth", host: "Selección Nocturna", live: false }
             ]
         };
 
@@ -386,18 +386,12 @@
             loadTrack(index, true);
         }
 
-        function filterByGenre(genre) {
-            const idx = masterTrackDatabase.findIndex(station => station.genre === genre);
-            if(idx !== -1) {
-                selectStation(idx);
-            }
-        }
-
         function loadTrack(index, autoPlay = true) {
             currentTrackIndex = index;
             const track = masterTrackDatabase[currentTrackIndex];
             if (!track) return;
 
+            // Actualizar información visual en pantalla
             document.getElementById('heroSongTitle').innerText = track.title;
             document.getElementById('heroArtistTitle').innerText = track.artist;
             document.getElementById('heroCoverArt').src = track.cover;
@@ -407,15 +401,16 @@
             document.getElementById('footerArtistName').innerText = track.artist;
             document.getElementById('footerCover').src = track.cover;
 
+            // Actualizar la guía de contenidos según el género activo
             renderSchedule(track.genre);
 
-            // Detener transmisión anterior de forma limpia
+            // Reiniciar y cambiar el stream de audio
             if (realAudio) {
                 realAudio.pause();
-                realAudio.src = "";
+                realAudio.removeAttribute('src');
+                realAudio.load();
             }
 
-            // Instanciar nuevo audio con el stream de la radio elegida
             realAudio = new Audio(track.streamUrl);
             realAudio.crossOrigin = "anonymous";
             realAudio.volume = parseFloat(document.getElementById('volumeSlider').value || 0.8);
@@ -447,19 +442,14 @@
                 if (footerIcon) footerIcon.className = "fa-solid fa-pause text-xs";
                 
                 const track = masterTrackDatabase[currentTrackIndex];
-                if (!realAudio.src || realAudio.src === "" || realAudio.src !== track.streamUrl) {
+                if (!realAudio.src || realAudio.src === "" || !realAudio.src.includes(track.streamUrl)) {
                     realAudio.src = track.streamUrl;
                 }
                 
                 const playPromise = realAudio.play();
                 if (playPromise !== undefined) {
                     playPromise.catch(err => {
-                        console.log("Audio autoplay diferido:", err);
-                        isPlaying = false;
-                        if (vinyl) vinyl.classList.add('vinyl-paused');
-                        if (mainIcon) mainIcon.className = "fa-solid fa-play text-lg";
-                        if (mainText) mainText.innerText = "Sintonizar";
-                        if (footerIcon) footerIcon.className = "fa-solid fa-play text-xs";
+                        console.log("Reproducción diferida por políticas del navegador:", err);
                     });
                 }
             } else {
@@ -472,130 +462,146 @@
             }
         }
 
+        // --- PLAYBACK CONTROL FUNCTIONS ---
+        function prevTrack() {
+            let nextIndex = currentTrackIndex - 1;
+            if (nextIndex < 0) nextIndex = masterTrackDatabase.length - 1;
+            selectStation(nextIndex);
+        }
+
         function nextTrack() {
             let nextIndex = (currentTrackIndex + 1) % masterTrackDatabase.length;
             selectStation(nextIndex);
         }
 
-        function prevTrack() {
-            let prevIndex = (currentTrackIndex - 1 + masterTrackDatabase.length) % masterTrackDatabase.length;
-            selectStation(prevIndex);
-        }
-
         function changeVolume(val) {
+            if (realAudio) {
+                realAudio.volume = parseFloat(val);
+            }
             const icon = document.getElementById('volumeIcon');
-            if (realAudio) realAudio.volume = parseFloat(val);
-            if (!icon) return;
-            if (val == 0) {
-                icon.className = "fa-solid fa-volume-xmark text-xs text-rose-500";
-            } else if (val < 0.5) {
-                icon.className = "fa-solid fa-volume-low text-xs text-slate-400";
-            } else {
-                icon.className = "fa-solid fa-volume-high text-xs text-slate-400";
+            if (icon) {
+                if (val == 0) icon.className = "fa-solid fa-volume-xmark text-xs text-slate-500";
+                else if (val < 0.5) icon.className = "fa-solid fa-volume-low text-xs text-slate-400";
+                else icon.className = "fa-solid fa-volume-high text-xs text-slate-400";
             }
         }
 
         function toggleFavoriteCurrent() {
-            const track = masterTrackDatabase[currentTrackIndex];
-            if (!track) return;
             const btn = document.getElementById('headerFavBtn');
-            if (!btn) return;
-            
-            track.isFav = !track.isFav;
-            if (track.isFav) {
-                btn.classList.add('text-rose-500');
-                btn.classList.remove('text-slate-400');
-            } else {
-                btn.classList.remove('text-rose-500');
-                btn.classList.add('text-slate-400');
+            if (btn) {
+                btn.classList.toggle('text-rose-500');
+                btn.classList.toggle('text-slate-400');
             }
         }
 
         function updateEqualizerVisualizer() {
-            const container = document.getElementById('visualizerBars');
-            if (!container) return;
-            const bars = container.children;
-            for (let i = 0; i < bars.length; i++) {
+            const bars = document.querySelectorAll('#visualizerBars div');
+            if (!bars || bars.length === 0) return;
+            
+            bars.forEach(bar => {
                 if (isPlaying) {
                     const randomHeight = Math.floor(Math.random() * 24) + 4;
-                    bars[i].style.height = `${randomHeight}px`;
+                    bar.style.height = `${randomHeight}px`;
                 } else {
-                    bars[i].style.height = `4px`;
+                    bar.style.height = '4px';
                 }
-            }
+            });
         }
 
-        function initPresence() {
-            presenceChannel.onmessage = (e) => {
-                if (e.data && e.data.type === 'ping') {
-                    activePeers.add(e.data.id);
-                    updateListenerCountUI();
-                }
-            };
-            setInterval(() => {
-                presenceChannel.postMessage({ type: 'ping', id: currentUserId });
-                activePeers.add(currentUserId);
-                updateListenerCountUI();
-            }, 3000);
-        }
-
-        function updateListenerCountUI() {
-            const countEl = document.getElementById('listenerCount');
-            if (countEl) {
-                countEl.innerText = activePeers.size;
-            }
-        }
-
+        // --- CHAT & REAL PRESENCE SYSTEM ---
         function initChat() {
-            chatChannel.onmessage = function (e) {
-                if (e.data && e.data.user && e.data.message) {
-                    addChatMessage(e.data.user, e.data.message, false);
+            chatChannel.onmessage = (event) => {
+                if (event.data && event.data.type === 'NEW_MESSAGE') {
+                    displayMessage(event.data.user, event.data.text, event.data.time, false);
                 }
             };
-        }
 
-        function addChatMessage(user, message, isSelf = false) {
-            const container = document.getElementById('chatMessages');
-            if (!container) return;
-            const msgEl = document.createElement('div');
-            msgEl.className = isSelf 
-                ? "bg-brand-600/20 p-2.5 rounded-xl border border-brand-500/40 text-slate-100" 
-                : "bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-slate-300";
-            
-            msgEl.innerHTML = `
-                <div class="flex items-center justify-between mb-0.5">
-                    <span class="font-bold ${isSelf ? 'text-brand-300' : 'text-brand-400'}">${escapeHtml(user)}</span>
-                    <span class="text-[9px] text-slate-500">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-                </div>
-                <p class="text-slate-200">${escapeHtml(message)}</p>
-            `;
-            container.appendChild(msgEl);
-            container.scrollTop = container.scrollHeight;
+            // Synchronize via localStorage for cross-tab multi-window fallback
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'el_abuelo_chat_msg' && e.newValue) {
+                    try {
+                        const data = JSON.parse(e.newValue);
+                        displayMessage(data.user, data.text, data.time, false);
+                    } catch(err){}
+                }
+            });
         }
 
         function sendChatMessage(e) {
             e.preventDefault();
-            const input = document.getElementById('chatInput');
             const userInput = document.getElementById('chatUser');
+            const msgInput = document.getElementById('chatInput');
             
-            if (!input) return;
-            const val = input.value.trim();
-            const userName = (userInput && userInput.value.trim()) ? userInput.value.trim() : "Oyente";
-            
-            if (val) {
-                addChatMessage(userName, val, true);
-                chatChannel.postMessage({ user: userName, message: val });
-                input.value = "";
-            }
+            const user = (userInput && userInput.value.trim()) ? userInput.value.trim() : 'Oyente';
+            const text = (msgInput && msgInput.value.trim()) ? msgInput.value.trim() : '';
+
+            if (!text) return;
+
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const msgData = { type: 'NEW_MESSAGE', user: user, text: text, time: timeStr };
+
+            // Display locally
+            displayMessage(user, text, timeStr, true);
+
+            // Broadcast to all connected clients
+            try {
+                chatChannel.postMessage(msgData);
+                localStorage.setItem('el_abuelo_chat_msg', JSON.stringify(msgData));
+            } catch(err){}
+
+            msgInput.value = '';
         }
 
-        function escapeHtml(text) {
-            return String(text)
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+        function displayMessage(user, text, timeStr, isSelf) {
+            const container = document.getElementById('chatMessages');
+            if (!container) return;
+
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `p-2.5 rounded-xl text-xs border ${
+                isSelf 
+                ? 'bg-brand-950/70 border-brand-500/40 text-slate-100 ml-4' 
+                : 'bg-slate-900/90 border-slate-800 text-slate-200 mr-4'
+            }`;
+
+            msgDiv.innerHTML = `
+                <div class="flex items-center justify-between mb-1">
+                    <span class="font-bold ${isSelf ? 'text-brand-400' : 'text-slate-300'}">${escapeHtml(user)}</span>
+                    <span class="text-[9px] text-slate-500">${timeStr}</span>
+                </div>
+                <p class="break-words">${escapeHtml(text)}</p>
+            `;
+
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
+        }
+
+        function initPresence() {
+            // Heartbeat to count real active listeners across tabs/windows
+            setInterval(() => {
+                try {
+                    presenceChannel.postMessage({ type: 'PING', id: currentUserId });
+                } catch(e){}
+            }, 3000);
+
+            presenceChannel.onmessage = (event) => {
+                if (event.data && event.data.type === 'PING') {
+                    activePeers.add(event.data.id);
+                    updateListenerCount();
+                }
+            };
+        }
+
+        function updateListenerCount() {
+            const el = document.getElementById('listenerCount');
+            if (el) {
+                el.innerText = Math.max(1, activePeers.size);
+            }
         }
     </script>
 </body>
