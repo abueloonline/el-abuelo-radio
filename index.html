@@ -242,12 +242,12 @@
 
     <!-- AUDIO ENGINE & CHAT SCRIPT -->
     <script>
-        // Cada género es una estación de radio independiente con transmisiones de alta estabilidad y streams de respaldo
+        // Cada género es una estación de radio independiente con transmisiones directas garantizadas
         const masterTrackDatabase = [
             { 
                 id: 1, 
-                title: "Radio Cumbia & Tropi", 
-                artist: "Cumbia FM En Vivo", 
+                title: "Radio Cumbia & Tropical", 
+                artist: "FM Cumbia Latina 24/7", 
                 genre: "Cumbia & Tropical", 
                 cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80", 
                 streamUrl: "https://stream.zeno.fm/f3wvbbqmdg8uv" 
@@ -255,7 +255,7 @@
             { 
                 id: 2, 
                 title: "Salsa & Son Latino", 
-                artist: "Salsa Radio En Vivo", 
+                artist: "Salsa Caribe Online", 
                 genre: "Salsa & Son", 
                 cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&q=80", 
                 streamUrl: "https://stream.zeno.fm/0r26w140308uv" 
@@ -263,7 +263,7 @@
             { 
                 id: 3, 
                 title: "Rock Nacional & Hits", 
-                artist: "Rock FM 24hs", 
+                artist: "Rock Clásico FM", 
                 genre: "Rock & Clásicos", 
                 cover: "https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=400&q=80", 
                 streamUrl: "https://stream.zeno.fm/uq6y23844d0uv" 
@@ -271,15 +271,15 @@
             { 
                 id: 4, 
                 title: "Top Pop & Urban Hits", 
-                artist: "Pop Planet Radio", 
+                artist: "Radio Pop Planet", 
                 genre: "Pop & Urbano", 
                 cover: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=400&q=80", 
                 streamUrl: "https://stream.zeno.fm/u2768be67v8uv" 
             },
             { 
                 id: 5, 
-                title: "Lofi Beats & Chill 24/7", 
-                artist: "Lofi Station Online", 
+                title: "Lofi Beats & Chill", 
+                artist: "Lofi Radio 24/7", 
                 genre: "Lofi & Chill", 
                 cover: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=400&q=80", 
                 streamUrl: "https://stream.zeno.fm/05477838584uv" 
@@ -332,7 +332,28 @@
             setInterval(updateEqualizerVisualizer, 150);
         };
 
-        // Renderiza cada estación de radio como un botón con icono y estado de sintonía
+        function renderSchedule(genre) {
+            const container = document.getElementById('scheduleContainer');
+            const label = document.getElementById('scheduleGenreLabel');
+            if (label) label.innerText = genre;
+            
+            const schedule = genreSchedules[genre] || genreSchedules["Cumbia & Tropical"];
+            if (!container) return;
+            
+            container.innerHTML = schedule.map(prog => `
+                <div class="p-2.5 rounded-xl border ${prog.live ? 'bg-brand-950/40 border-brand-500/50' : 'bg-slate-900/60 border-slate-800'} flex items-center justify-between">
+                    <div>
+                        <div class="font-bold text-slate-200 flex items-center gap-1.5">
+                            ${prog.live ? '<span class="w-2 h-2 rounded-full bg-brand-500 animate-ping"></span>' : ''}
+                            ${prog.name}
+                        </div>
+                        <div class="text-[10px] text-slate-400 mt-0.5">${prog.host}</div>
+                    </div>
+                    <span class="text-[10px] font-semibold text-slate-400 bg-slate-800 px-2 py-1 rounded-lg">${prog.time}</span>
+                </div>
+            `).join('');
+        }
+
         function renderGenreTabs() {
             const container = document.getElementById('genresContainer');
             if(!container) return;
@@ -359,7 +380,6 @@
             }).join('');
         }
 
-        // Al hacer clic en una emisora, sintoniza la radio elegida y reproduce inmediatamente
         function selectStation(index) {
             currentTrackIndex = index;
             renderGenreTabs();
@@ -387,19 +407,17 @@
             document.getElementById('footerArtistName').innerText = track.artist;
             document.getElementById('footerCover').src = track.cover;
 
-            // Actualizar guía de programación según la emisora seleccionada
             renderSchedule(track.genre);
 
-            // Detener y resetear correctamente la reproducción anterior
+            // Detener transmisión anterior de forma limpia
             if (realAudio) {
                 realAudio.pause();
-                realAudio.removeAttribute('src');
-                realAudio.load();
+                realAudio.src = "";
             }
 
-            realAudio = new Audio();
-            realAudio.src = track.streamUrl;
-            realAudio.preload = "none";
+            // Instanciar nuevo audio con el stream de la radio elegida
+            realAudio = new Audio(track.streamUrl);
+            realAudio.crossOrigin = "anonymous";
             realAudio.volume = parseFloat(document.getElementById('volumeSlider').value || 0.8);
 
             if (autoPlay) {
@@ -428,15 +446,15 @@
                 if (mainText) mainText.innerText = "Pausar";
                 if (footerIcon) footerIcon.className = "fa-solid fa-pause text-xs";
                 
-                // Cargar stream y reproducir
-                if (!realAudio.src || realAudio.src === "") {
-                    realAudio.src = masterTrackDatabase[currentTrackIndex].streamUrl;
+                const track = masterTrackDatabase[currentTrackIndex];
+                if (!realAudio.src || realAudio.src === "" || realAudio.src !== track.streamUrl) {
+                    realAudio.src = track.streamUrl;
                 }
                 
                 const playPromise = realAudio.play();
                 if (playPromise !== undefined) {
                     playPromise.catch(err => {
-                        console.log("Audio autoplay prevenido o bloqueado por el navegador:", err);
+                        console.log("Audio autoplay diferido:", err);
                         isPlaying = false;
                         if (vinyl) vinyl.classList.add('vinyl-paused');
                         if (mainIcon) mainIcon.className = "fa-solid fa-play text-lg";
@@ -466,7 +484,7 @@
 
         function changeVolume(val) {
             const icon = document.getElementById('volumeIcon');
-            realAudio.volume = parseFloat(val);
+            if (realAudio) realAudio.volume = parseFloat(val);
             if (!icon) return;
             if (val == 0) {
                 icon.className = "fa-solid fa-volume-xmark text-xs text-rose-500";
@@ -507,7 +525,6 @@
             }
         }
 
-        // Real-time listener count sync
         function initPresence() {
             presenceChannel.onmessage = (e) => {
                 if (e.data && e.data.type === 'ping') {
@@ -529,7 +546,6 @@
             }
         }
 
-        // Live Chat Engine
         function initChat() {
             chatChannel.onmessage = function (e) {
                 if (e.data && e.data.user && e.data.message) {
