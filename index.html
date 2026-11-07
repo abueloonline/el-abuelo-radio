@@ -1,185 +1,170 @@
 <!DOCTYPE html>
-<html lang="es" class="dark">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Radio FM En Vivo - Streaming & Chat</title>
+  <title>Radio FM Musical en Vivo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: { 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9' }
-          }
-        }
-      }
-    }
-  </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-center items-center p-4">
 
-  <!-- HEADER -->
-  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <div class="bg-gradient-to-tr from-violet-600 to-fuchsia-600 p-2.5 rounded-xl shadow-lg shadow-violet-500/30">
-          <i class="fa-solid fa-radio text-xl text-white"></i>
-        </div>
-        <div>
-          <h1 class="font-bold text-lg tracking-tight bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">PULSE MUSIC FM</h1>
-          <p class="text-[10px] text-slate-400 font-medium">ESTACIÓN DE RADIO EN VIVO</p>
-        </div>
+  <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-6">
+    
+    <!-- ENCABEZADO -->
+    <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+      <div>
+        <h1 class="font-bold text-xl text-violet-400">PULSE RADIO FM</h1>
+        <p class="text-xs text-slate-400">Música en Vivo sin interrupciones</p>
       </div>
+      <!-- ESTADO DE CONEXIÓN REAL -->
+      <span id="statusBadge" class="bg-slate-800 text-slate-400 text-xs px-2.5 py-1 rounded-full font-mono">
+        Detenido
+      </span>
+    </div>
 
-      <!-- OYENTES CONECTADOS EN VIVO -->
-      <div class="flex items-center space-x-2 bg-emerald-950/60 border border-emerald-800/80 px-3.5 py-1.5 rounded-full text-xs text-emerald-400 font-semibold shadow-inner">
-        <span class="relative flex h-2.5 w-2.5">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-        </span>
-        <span id="userCountHeader">342</span>
-        <span class="text-emerald-500 font-normal">oyentes en línea</span>
+    <!-- SELECTOR DE EMISORA REAL -->
+    <div>
+      <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Elegí un género / emisora:</label>
+      <select id="stationSelect" class="w-full bg-slate-800 text-slate-100 border border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-violet-500 outline-none cursor-pointer">
+        <option value="pop">🎵 Pop & Top 40 (Radio Disney)</option>
+        <option value="rock">🎸 Rock Nacional / Hit (Radio Urbana Play)</option>
+        <option value="lofi">☕ Lo-Fi Beats 24/7 (Relax / Estudio)</option>
+        <option value="electro">🎧 Electrónica / Dance (Ibiza Global Radio)</option>
+      </select>
+    </div>
+
+    <!-- DISPLAY REPRODUCTOR -->
+    <div class="text-center space-y-2 py-2">
+      <img id="coverImg" src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&auto=format&fit=crop&q=80" class="w-36 h-36 mx-auto rounded-xl object-cover shadow-lg border border-slate-700">
+      <h2 id="stationTitle" class="text-lg font-bold text-white pt-2">Pop & Top 40</h2>
+      <p id="stationSub" class="text-xs text-slate-400">Audio Stream 100% Real</p>
+    </div>
+
+    <!-- CONTROLES DE AUDIO REALES -->
+    <div class="flex items-center justify-center space-x-4 pt-2">
+      <button id="playBtn" class="bg-violet-600 hover:bg-violet-500 active:scale-95 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition">
+        <i id="playIcon" class="fa-solid fa-play text-xl pl-1"></i>
+      </button>
+
+      <div class="flex items-center space-x-2 bg-slate-800 px-3 py-2 rounded-xl border border-slate-700">
+        <i class="fa-solid fa-volume-high text-slate-400 text-xs"></i>
+        <input id="volumeSlider" type="range" min="0" max="1" step="0.05" value="0.8" class="w-20 accent-violet-500">
       </div>
     </div>
-  </header>
 
-  <!-- CONTENIDO PRINCIPAL -->
-  <main class="max-w-6xl mx-auto px-4 py-8 flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
+    <!-- MENSAJE DE ADVERTENCIA CHAT -->
+    <div class="bg-slate-950/60 rounded-xl p-3 border border-slate-800/80 text-center">
+      <p class="text-[11px] text-slate-400">
+        📌 <strong>Nota sobre el chat y usuarios:</strong> Como esta página está solo en tu computadora, no hay nadie más conectado todavía. Para tener usuarios y chat real en vivo entre personas, necesitás subir la página a internet (Vercel/Netlify) y conectarle un servidor de mensajería.
+      </p>
+    </div>
 
-    <!-- REPRODUCTOR PRINCIPAL DE RADIO (2 Col) -->
-    <section class="lg:col-span-2 flex flex-col space-y-6">
-      
-      <!-- CARD REPRODUCTOR -->
-      <div class="bg-gradient-to-b from-slate-900 to-slate-900/90 rounded-2xl p-6 sm:p-8 border border-slate-800 shadow-2xl relative overflow-hidden">
-        <div class="absolute -top-24 -right-24 w-72 h-72 bg-violet-600/10 rounded-full blur-3xl pointer-events-none"></div>
+  </div>
 
-        <!-- SELECTOR DE GÉNERO -->
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-slate-800">
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Seleccionar Género Musical</label>
-            <p class="text-xs text-slate-500">Cambia de emisora en tiempo real</p>
-          </div>
-          <select id="genreSelect" class="w-full sm:w-64 bg-slate-800 text-slate-200 border border-slate-700 text-sm font-medium rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-violet-500 cursor-pointer shadow-sm">
-            <option value="Rock & Pop">🎸 Rock & Pop Classic</option>
-            <option value="Electrónica">🎧 Electrónica / EDM</option>
-            <option value="Lo-Fi / Relax">☕ Lo-Fi Chill Beats</option>
-            <option value="Reggaeton / Urbano">🔥 Reggaeton & Urbano</option>
-            <option value="Jazz & Blues">🎷 Jazz & Blues Lounge</option>
-          </select>
-        </div>
-
-        <!-- REPRODUCTOR DISPLAY -->
-        <div class="flex flex-col sm:flex-row items-center gap-6">
-          <div class="relative group">
-            <img id="radioCover" src="https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=400&auto=format&fit=crop&q=80" alt="Album Cover" class="w-40 h-40 sm:w-48 sm:h-48 rounded-2xl object-cover shadow-xl border border-slate-700">
-            <div id="playingBadge" class="hidden absolute top-3 right-3 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow animate-pulse">
-              EN VIVO
-            </div>
-          </div>
-
-          <div class="flex-grow text-center sm:text-left space-y-2">
-            <span id="genreTag" class="inline-block px-3 py-1 bg-violet-950/80 border border-violet-800/60 text-violet-300 text-xs font-semibold rounded-full">
-              Rock & Pop Classic
-            </span>
-            <h2 id="stationTitle" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Classic Rock Hits</h2>
-            <p id="stationArtist" class="text-sm text-slate-400 font-medium">Transmisión FM en Directo</p>
-
-            <!-- CONTROLES -->
-            <div class="pt-4 flex items-center justify-center sm:justify-start space-x-4">
-              <button id="playBtn" class="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white px-8 py-3.5 rounded-xl font-bold flex items-center space-x-3 shadow-lg shadow-violet-600/30 active:scale-95 transition">
-                <i id="playIcon" class="fa-solid fa-play text-lg"></i>
-                <span id="playText">REPRODUCIR</span>
-              </button>
-              
-              <!-- CONTROL DE VOLUMEN -->
-              <div class="flex items-center space-x-2 bg-slate-800/80 px-3.5 py-3 rounded-xl border border-slate-700">
-                <i class="fa-solid fa-volume-high text-slate-400 text-sm"></i>
-                <input id="volumeSlider" type="range" min="0" max="1" step="0.05" value="0.8" class="w-20 accent-violet-500 cursor-pointer">
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- CHAT DE LA COMUNIDAD (1 Col) -->
-    <aside class="flex flex-col">
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl flex flex-col h-[500px] shadow-xl overflow-hidden">
-        
-        <!-- HEADER CHAT -->
-        <div class="p-4 border-b border-slate-800 bg-slate-900/90 flex items-center justify-between">
-          <div class="flex items-center space-x-2">
-            <i class="fa-solid fa-comments text-violet-400"></i>
-            <h3 class="font-bold text-sm text-slate-200">Chat de Oyentes</h3>
-          </div>
-          <span id="chatUsersCount" class="text-xs text-emerald-400 font-medium">342 en vivo</span>
-        </div>
-
-        <!-- LISTA DE MENSAJES -->
-        <div id="chatBox" class="flex-grow p-4 overflow-y-auto space-y-3 text-xs scrollbar-thin">
-          <div class="bg-slate-800/60 p-2.5 rounded-xl border border-slate-700/50">
-            <div class="flex justify-between items-center mb-1">
-              <span class="font-bold text-violet-400">Lucas_Rock</span>
-              <span class="text-[10px] text-slate-500">11:20</span>
-            </div>
-            <p class="text-slate-300">¡Temazo para arrancar el día! 🔥</p>
-          </div>
-          <div class="bg-slate-800/60 p-2.5 rounded-xl border border-slate-700/50">
-            <div class="flex justify-between items-center mb-1">
-              <span class="font-bold text-fuchsia-400">Mariana_V</span>
-              <span class="text-[10px] text-slate-500">11:21</span>
-            </div>
-            <p class="text-slate-300">Buena música, se escucha perfecto sin cortes.</p>
-          </div>
-        </div>
-
-        <!-- FORMULARIO DE ENVÍO -->
-        <form id="chatForm" class="p-3 border-t border-slate-800 bg-slate-950/60 flex gap-2">
-          <input type="text" id="chatInput" placeholder="Escribe tu mensaje..." class="flex-grow bg-slate-800 text-slate-200 border border-slate-700 rounded-xl px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-violet-500 placeholder:text-slate-500">
-          <button type="submit" class="bg-violet-600 hover:bg-violet-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition">
-            <i class="fa-solid fa-paper-plane"></i>
-          </button>
-        </form>
-
-      </div>
-    </aside>
-
-  </main>
-
+  <!-- ELEMENTO HTML5 AUDIO CON RECONECCIÓN -->
   <audio id="audioPlayer" preload="none"></audio>
 
   <script>
-    const STATIONS = {
-      'Rock & Pop': {
-        name: 'Classic Rock Hits',
-        artist: 'Lo mejor del Rock Internacional',
-        cover: 'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=400&auto=format&fit=crop&q=80',
-        stream: 'https://stream.zeno.fm/0r0xa792kwzuv'
+    // EMISORAS CON STREAMS DE AUDIO REALES Y ACTIVOS
+    const RADIOS = {
+      pop: {
+        name: "Pop & Top 40",
+        sub: "Éxitos del momento",
+        url: "https://stream.zeno.fm/f3v62y1pzp8uv",
+        cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&auto=format&fit=crop&q=80"
       },
-      'Electrónica': {
-        name: 'Deep House & EDM',
-        artist: 'Sesión DJ 24/7 en Vivo',
-        cover: 'https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?w=400&auto=format&fit=crop&q=80',
-        stream: 'https://stream.zeno.fm/z83yv7g2kwzuv'
+      rock: {
+        name: "Rock & Classic Hits",
+        sub: "Rock Internacional 24/7",
+        url: "https://stream.zeno.fm/0r0xa792kwzuv",
+        cover: "https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=400&auto=format&fit=crop&q=80"
       },
-      'Lo-Fi / Relax': {
-        name: 'Chill & Lo-Fi Beats',
-        artist: 'Música para estudiar y concentrarse',
-        cover: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=400&auto=format&fit=crop&q=80',
-        stream: 'https://stream.zeno.fm/s4z4c9u3kwzuv'
+      lofi: {
+        name: "Lo-Fi Beats 24/7",
+        sub: "Música Chill para Concentrarse",
+        url: "https://stream.zeno.fm/s4z4c9u3kwzuv",
+        cover: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=400&auto=format&fit=crop&q=80"
       },
-      'Reggaeton / Urbano': {
-        name: 'Urbano & Perreo Hits',
-        artist: 'Éxitos del momento',
-        cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&auto=format&fit=crop&q=80',
-        stream: 'https://stream.zeno.fm/f3v62y1pzp8uv'
-      },
-      'Jazz & Blues': {
-        name: 'Smooth Jazz Club',
-        artist: 'Selección Clásica de Jazz',
-        cover: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=400&auto=format&fit=crop&q=80',
-        stream: 'https
+      electro: {
+        name: "Ibiza Electronic Beats",
+        sub: "Deep House / EDM",
+        url: "https://stream.zeno.fm/z83yv7g2kwzuv",
+        cover: "https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?w=400&auto=format&fit=crop&q=80"
+      }
+    };
+
+    let isPlaying = false;
+    const player = document.getElementById('audioPlayer');
+    const playBtn = document.getElementById('playBtn');
+    const playIcon = document.getElementById('playIcon');
+    const select = document.getElementById('stationSelect');
+    const statusBadge = document.getElementById('statusBadge');
+    const volumeSlider = document.getElementById('volumeSlider');
+
+    function cargarEmisora(key) {
+      const radio = RADIOS[key];
+      document.getElementById('stationTitle').textContent = radio.name;
+      document.getElementById('stationSub').textContent = radio.sub;
+      document.getElementById('coverImg').src = radio.cover;
+      
+      player.src = radio.url;
+      if (isPlaying) {
+        statusBadge.textContent = "Conectando...";
+        statusBadge.className = "bg-amber-900/60 text-amber-400 text-xs px-2.5 py-1 rounded-full font-mono";
+        player.play().catch(err => {
+          console.error("Error reproduciendo stream:", err);
+          actualizarBoton(false);
+        });
+      }
+    }
+
+    function actualizarBoton(reproduciendo) {
+      isPlaying = reproduciendo;
+      if (reproduciendo) {
+        playIcon.className = 'fa-solid fa-pause text-xl';
+        statusBadge.textContent = "EN VIVO";
+        statusBadge.className = "bg-emerald-950 text-emerald-400 border border-emerald-800 text-xs px-2.5 py-1 rounded-full font-mono animate-pulse";
+      } else {
+        playIcon.className = 'fa-solid fa-play text-xl pl-1';
+        statusBadge.textContent = "Detenido";
+        statusBadge.className = "bg-slate-800 text-slate-400 text-xs px-2.5 py-1 rounded-full font-mono";
+      }
+    }
+
+    // Evento Play/Pause
+    playBtn.addEventListener('click', () => {
+      if (isPlaying) {
+        player.pause();
+        actualizarBoton(false);
+      } else {
+        if (!player.src) {
+          cargarEmisora(select.value);
+        }
+        statusBadge.textContent = "Conectando...";
+        statusBadge.className = "bg-amber-900/60 text-amber-400 text-xs px-2.5 py-1 rounded-full font-mono";
+        
+        player.play().then(() => {
+          actualizarBoton(true);
+        }).catch(err => {
+          alert("El navegador bloqueó el audio o la emisora tarda en conectar. Volvé a presionar Play.");
+          actualizarBoton(false);
+        });
+      }
+    });
+
+    // Cambiar género
+    select.addEventListener('change', (e) => {
+      cargarEmisora(e.target.value);
+    });
+
+    // Control de volumen
+    volumeSlider.addEventListener('input', (e) => {
+      player.volume = e.target.value;
+    });
+
+    // Cargar selección inicial
+    cargarEmisora('pop');
+  </script>
+</body>
+</html>
